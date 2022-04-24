@@ -83,6 +83,7 @@ module.exports = {
     'vue/no-v-model-argument': 0,
     'prefer-promise-reject-errors': 0,
     'vue/attribute-hyphenation': 0,
-    camelcase: 0
+    camelcase: 0,
+    'no-undef': 'off'
   }
 }
