@@ -145,12 +145,12 @@ const router = useRouter()
 const getInfo = () => {
   axios.get('/api/v1/customer/get_customer_info').then((res: any) => {
     if (!res.error_code) {
-      const { menu, download, search } = res.data
+      const { menu, search } = res.data
       const menuList = util.findPriority(menu)
       util.setUserInfo({
         ...res.data,
         menu: menuList,
-        searchList: search,
+        searchList: search
       })
       router.push(menuList[0])
     }
