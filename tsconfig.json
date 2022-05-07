@@ -15,5 +15,13 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "src/util/index.ts", "src/main.ts", "src/route/index.ts"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "src/util/index.ts",
+    "src/main.ts",
+    "src/route/index.ts"
+  ]
 }
