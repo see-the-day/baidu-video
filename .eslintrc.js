@@ -18,7 +18,10 @@ module.exports = {
       files: ['*.ts'],
       parser: '@typescript-eslint/parser',
       plugins: ['@typescript-eslint'],
-      extends: ['plugin:@typescript-eslint/recommended']
+      extends: ['plugin:@typescript-eslint/recommended'],
+      rules: {
+        '@typescript-eslint/no-non-null-assertion': 'off',
+      }
     }
   ],
   globals: {
@@ -27,10 +30,9 @@ module.exports = {
     defineExpose: 'writable',
   },
   rules: {
+    "no-var": 1,
     '@typescript-eslint/camelcase': 0,
-    '@typescript-eslint/no-non-null-assertion': 0,
     '@typescript-eslint/ban-ts-ignore': 0,
-    '@typescript-eslint/no-var-requires': 0,
     '@typescript-eslint/no-empty-function': 0,
     '@typescript-eslint/explicit-function-return-type': [
       0,
