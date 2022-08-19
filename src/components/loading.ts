@@ -57,13 +57,13 @@ const create = (): void => {
 const trapezoidBox = () => {
   const player = new Player('#loading-child-box')
   const parser = new Parser()
-  parser.load('https://res.smzdm.com/datazhi/loading.svga', function (videoItem: VideoEntity) {
+  parser.load('/loading.svga', function (videoItem: VideoEntity) {
     player.setVideoItem(videoItem)
     player.startAnimation()
   })
 }
 
-const close = () => {
+const close = (): void => {
   const loadingDiv = document.querySelector('#loading-box')
   document.body.removeAttribute('style')
   if (loadingDiv) {
