@@ -7,7 +7,7 @@ export interface Table {
   sorter?: string
   align?: string
   ellipsis?: boolean
-  render?: (row: any, index: number) => any
+  render?: any
 }
 
 export interface LineData {
