@@ -1,18 +1,18 @@
 <template>
-  <div class="flex h-56 items-center w-full border-b divide-primary">
+  <div class="flex h-56 w-full items-center divide-primary border-b">
     <div
-      class="flex items-center h-16 divide-primary pl-24 pr-20"
-      :class="{'border-r': !isLogin}"
+      class="flex h-16 items-center divide-primary pl-24 pr-20"
+      :class="{ 'border-r': !isLogin }"
     >
-      <img src="@/assets/index/index.png" class="w-66 h-24">
+      <img src="@/assets/index/index.png" class="h-24 w-66" />
     </div>
-    <div v-if="!isLogin" class="flex items-center ml-20">
+    <div v-if="!isLogin" class="ml-20 flex items-center">
       <svg class="icon mr-12" aria-hidden="true">
         <use :xlink:href="`#${icon}`" />
       </svg>
       <span>{{ title }}</span>
     </div>
-    <div v-if="!isLogin" class="flex items-center flex-1 justify-end mr-16">
+    <div v-if="!isLogin" class="mr-16 flex flex-1 items-center justify-end">
       <n-popover
         placement="bottom-end"
         trigger="click"
@@ -22,21 +22,25 @@
       >
         <template #trigger>
           <div
-            class="flex items-center pl-8 pr-8 hover:bg-boxBack rounded-4 cursor-pointer"
+            class="flex cursor-pointer items-center rounded-4 pl-8 pr-8 hover:bg-boxBack"
             :class="isShow ? 'bg-boxBack' : 'bg-bgGray'"
           >
             <span class="mr-12">{{ userInfo.name }}</span>
             <span class="iconfont icon-xiangxia" />
           </div>
         </template>
-        <div class="bg-bgExit rounded-4 w-224 flex">
-          <div class="flex flex-col flex-1 pt-15 pb-15 pl-20">
-            <span class="text-textWhite text-16 font-medium">{{ userInfo.name }}</span>
-            <span class="mt-4 text-textWhite text-12">到期时间：{{ userInfo.validity_time }}</span>
+        <div class="flex w-224 rounded-4 bg-bgExit">
+          <div class="flex flex-1 flex-col pt-15 pb-15 pl-20">
+            <span class="text-16 font-medium text-textWhite">{{
+              userInfo.name
+            }}</span>
+            <span class="mt-4 text-12 text-textWhite"
+              >到期时间：{{ userInfo.validity_time }}</span
+            >
           </div>
-          <img src="@/assets/exit/background.png" class="w-40 h-64 mt-8">
+          <img src="@/assets/exit/background.png" class="mt-8 h-64 w-40" />
         </div>
-        <div class="w-full border-b h-1 mt-8 mb-6" />
+        <div class="mt-8 mb-6 h-1 w-full border-b" />
         <exitLoginVue />
       </n-popover>
     </div>

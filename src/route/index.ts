@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import { getUserInfo } from '@/util'
 import Login from '@/view/login/index.vue'
+
 const routes: RouteRecordRaw[] = [
   { path: '/', redirect: '/login' },
   { path: '/login', name: '登录', component: Login },
@@ -12,7 +13,7 @@ const routes: RouteRecordRaw[] = [
 
 const router = createRouter({
   history: createWebHashHistory(),
-  routes: routes
+  routes
 })
 
 // 路由前置守卫

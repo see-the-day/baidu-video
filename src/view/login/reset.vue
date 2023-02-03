@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="w-20 h-4 bg-bgSelect mb-12" />
+    <div class="mb-12 h-4 w-20 bg-bgSelect" />
     <span class="text-24 font-medium">重置密码</span>
   </div>
   <n-form
@@ -29,7 +29,11 @@
         @keydown.enter="handleValidateClick"
       />
     </n-form-item>
-    <n-button type="primary" class="w-364 h-48 mt-100" @click="handleValidateClick">
+    <n-button
+      type="primary"
+      class="mt-100 h-48 w-364"
+      @click="handleValidateClick"
+    >
       去登录
     </n-button>
   </n-form>
@@ -45,10 +49,11 @@ const rules: {} = {
   password: {
     required: true,
     trigger: 'blur',
-    validator (_:string, value: string) {
+    validator(_: string, value: string) {
       if (!value) {
         return new Error('请输入密码')
-      } else if (value.length < 6 || value.length > 15) {
+      }
+      if (value.length < 6 || value.length > 15) {
         return new Error('长度在 6 到 15 个字符')
       }
       return true
@@ -57,7 +62,7 @@ const rules: {} = {
   newPassword: {
     required: true,
     trigger: 'blur',
-    validator (_:string, value: string) {
+    validator(_: string, value: string) {
       if (formValue.value.password !== value) {
         return new Error('两次密码不一致')
       }
@@ -72,24 +77,27 @@ const emit = defineEmits(['changeType'])
 const handleValidateClick = () => {
   formRef.value.validate((errors: string) => {
     if (!errors) {
-      axios.post(
-        '/api/v1/customer/change_password',
-        JSON.stringify({
-          ...formValue.value,
-          generate_key: login.generate_key
-        }),
-        {
-          headers: {
-            'Content-Type': 'application/json'
+      axios
+        .post(
+          '/api/v1/customer/change_password',
+          JSON.stringify({
+            ...formValue.value,
+            generate_key: login.generate_key
+          }),
+          {
+            headers: {
+              'Content-Type': 'application/json'
+            }
           }
-        }).then((res: any) => {
-        if (!res.error_code) {
-          window.$message.success(res.data.message)
-          localStorage.removeItem('DATAZHI-TOKEN')
-          localStorage.removeItem('USER_INFO')
-          emit('changeType', 1)
-        }
-      })
+        )
+        .then((res: any) => {
+          if (!res.error_code) {
+            window.$message.success(res.data.message)
+            localStorage.removeItem('DATAZHI-TOKEN')
+            localStorage.removeItem('USER_INFO')
+            emit('changeType', 1)
+          }
+        })
     }
   })
 }

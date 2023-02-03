@@ -1,5 +1,15 @@
 import { nextTick } from 'vue'
 import { Parser, Player, VideoEntity } from 'svgaplayerweb'
+
+const trapezoidBox = () => {
+  const player = new Player('#loading-child-box')
+  const parser = new Parser()
+  parser.load('/loading.svga', function (videoItem: VideoEntity) {
+    player.setVideoItem(videoItem)
+    player.startAnimation()
+  })
+}
+
 let isCreateLoading = true
 const create = (): void => {
   if (!isCreateLoading) {
@@ -54,20 +64,11 @@ const create = (): void => {
   })
 }
 
-const trapezoidBox = () => {
-  const player = new Player('#loading-child-box')
-  const parser = new Parser()
-  parser.load('/loading.svga', function (videoItem: VideoEntity) {
-    player.setVideoItem(videoItem)
-    player.startAnimation()
-  })
-}
-
 const close = (): void => {
   const loadingDiv = document.querySelector('#loading-box')
   document.body.removeAttribute('style')
   if (loadingDiv) {
-    (document.querySelector('#app') as HTMLElement).removeChild(loadingDiv)
+    ;(document.querySelector('#app') as HTMLElement).removeChild(loadingDiv)
     isCreateLoading = true
   }
 }

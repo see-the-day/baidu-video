@@ -5,7 +5,7 @@ export const useMenu = defineStore('menu', {
     collapsed: true
   }),
   actions: {
-    setCollapsed (isCollapsed: boolean) {
+    setCollapsed(isCollapsed: boolean) {
       this.collapsed = isCollapsed
     }
   }

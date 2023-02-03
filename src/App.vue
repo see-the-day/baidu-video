@@ -20,12 +20,13 @@
 
 <script setup lang="ts">
 import { NConfigProvider, zhCN, dateZhCN, NMessageProvider } from 'naive-ui'
-import themeOverrides from './util/project-theme'
+import { useRoute } from 'vue-router'
+import { watchEffect, ref } from 'vue'
 import Message from './components/Message.vue'
 import TopBar from './components/TopBar.vue'
 import LeftBar from './components/LeftBar/LeftBar.vue'
-import { useRoute } from 'vue-router'
-import { watchEffect, ref } from 'vue'
+import themeOverrides from './util/project-theme'
+
 const route = useRoute()
 const excludeBar = ref(false)
 watchEffect(() => {

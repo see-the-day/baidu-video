@@ -1,7 +1,7 @@
 <template>
   <NImage
     :src="src || imgSrc"
-    :img-props="{class: defaultClass}"
+    :img-props="{ class: defaultClass }"
     :fallback-src="fallback"
     :preview-disabled="true"
     object-fit="cover"
@@ -12,6 +12,7 @@ import { computed } from 'vue'
 import { NImage } from 'naive-ui'
 import imgSrc from '@/assets/noData/details-no-img.png'
 import fallback from '@/assets/noData/image-error.png'
+
 const props = defineProps({
   src: {
     type: String,

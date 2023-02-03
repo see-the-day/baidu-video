@@ -22,7 +22,7 @@
           :expand-icon="expandIcon"
         />
       </n-layout-sider>
-      <n-layout class="bg-bgGray" :class="{'left-content': !exclude}">
+      <n-layout class="bg-bgGray" :class="{ 'left-content': !exclude }">
         <slot />
       </n-layout>
     </n-layout>
@@ -46,19 +46,22 @@ const setMenu = (isCollapsed: boolean) => {
   menu.setCollapsed(isCollapsed)
 }
 
-function renderIcon (name: string) {
-  return () => h('svg', { class: ['icon'], 'aria-hidden': 'true' }, [
-    h('use', { 'xlink:href': `#${name}` })
-  ])
+function renderIcon(name: string) {
+  return () =>
+    h('svg', { class: ['icon'], 'aria-hidden': 'true' }, [
+      h('use', { 'xlink:href': `#${name}` })
+    ])
 }
 
 const routeLink = (path: string, label: string) => {
-  return () => h(RouterLink,
-    {
-      to: { path }
-    },
-    { default: () => label }
-  )
+  return () =>
+    h(
+      RouterLink,
+      {
+        to: { path }
+      },
+      { default: () => label }
+    )
 }
 const menuOptions = (name?: string) => [
   {
@@ -69,43 +72,41 @@ const menuOptions = (name?: string) => [
       {
         key: 'market-distribution',
         label: routeLink('/market-distribution', '市场分布')
-      },
+      }
     ]
-  },
+  }
 ]
 const options: Ref = ref([])
 const defaultExpandedKeys: Ref = ref([])
 const defaultValue = ref('')
 const urlKey: string = window.location.href.split('/#/')[1].split('?')[0]
-menuOptions().forEach(option => {
+menuOptions().forEach((option) => {
   if (option.children) {
-    option.children.forEach((oc: {key: string}) => {
+    option.children.forEach((oc: { key: string }) => {
       if (oc.key === urlKey) {
         defaultValue.value = urlKey
         defaultExpandedKeys.value.push(option.key)
       }
     })
-  } else {
-    if (option.key === urlKey) {
-      defaultValue.value = urlKey
-    }
+  } else if (option.key === urlKey) {
+    defaultValue.value = urlKey
   }
 })
 
 const menuFormat = () => {
   const menuListPermission = getUserInfo('menu') || []
   const urlJoin = (key: string) => `/${key}`
-  return menuOptions().filter(menu => {
-    if (menu.children) {
-      const children = menu.children.filter(mc => {
+  return menuOptions().filter((menuO) => {
+    if (menuO.children) {
+      const children = menuO.children.filter((mc) => {
         return menuListPermission.includes(urlJoin(mc.key))
       })
 
-      menu.children = children
+      menuO.children = children
       return !!children.length
     }
 
-    return menuListPermission.includes(urlJoin(menu.key))
+    return menuListPermission.includes(urlJoin(menuO.key))
   })
 }
 const route = useRoute()
@@ -115,7 +116,7 @@ watchEffect(() => {
   const leftBarKey = route.path.split('?')[0].split('/')[1].split('-')[0]
   exclude.value = excludeKey.includes(leftBarKey)
   options.value = menuFormat()
-  options.value.forEach((value: {key: string, icon: () => {}}) => {
+  options.value.forEach((value: { key: string; icon: () => {} }) => {
     if (value.key === leftBarKey) {
       value.icon = renderIcon(MENUCONST(leftBarKey))
     }

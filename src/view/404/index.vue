@@ -1,7 +1,9 @@
 <template>
-  <div class="h-full flex flex-col justify-center items-center bg-white">
-    <img :src="isNetwork ? noData : noOnLine" class="w-120 h-100">
-    <span class="text-gray-200">{{ isNetwork ? '页面加载失败' : '无法连接到网络' }}</span>
+  <div class="flex h-full flex-col items-center justify-center bg-white">
+    <img :src="isNetwork ? noData : noOnLine" class="h-100 w-120" />
+    <span class="text-gray-200">{{
+      isNetwork ? '页面加载失败' : '无法连接到网络'
+    }}</span>
   </div>
 </template>
 <script lang="ts" setup>

@@ -1,7 +1,9 @@
 <template>
-  <div class="w-full h-full flex justify-center items-center flex-col min-h-200">
-    <img src="@/assets/noData/no-data.png" class="w-120 h-100">
-    <div class="text-gray-200 mt-12">
+  <div
+    class="flex h-full min-h-200 w-full flex-col items-center justify-center"
+  >
+    <img src="@/assets/noData/no-data.png" class="h-100 w-120" />
+    <div class="mt-12 text-gray-200">
       {{ emptyText }}
     </div>
   </div>
