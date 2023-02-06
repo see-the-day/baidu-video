@@ -71,6 +71,10 @@ body,
   }
 }
 
+.n-button.n-button--primary-type {
+  background-color: var(--n-color);
+}
+
 .n-select,
 .n-base-selection {
   .n-base-selection-overlay__wrapper,

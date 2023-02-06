@@ -13,6 +13,7 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
+    minify: 'terser',
     assetsDir: 'assets',
     sourcemap: false,
     terserOptions: {
@@ -24,7 +25,7 @@ export default defineConfig({
   },
   server: {
     https: false,
-    open: false,
+    open: true,
     port: 3000,
     host: '0.0.0.0',
     proxy: {
