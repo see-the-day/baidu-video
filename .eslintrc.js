@@ -29,6 +29,8 @@ module.exports = {
     'import/extensions': 0,
     'no-return-assign': 0,
     'no-param-reassign': 0,
-    'no-plusplus': ['error', { allowForLoopAfterthoughts: true }]
+    'consistent-return': 0,
+    'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
+    'no-unused-expressions': ['error', { allowShortCircuit: true }]
   }
 }
