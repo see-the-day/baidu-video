@@ -23,11 +23,13 @@ module.exports = {
         18: '18px',
         22: '22px',
         24: '24px',
-        25: '25px'
+        25: '25px',
+        50: '50px'
       },
       backgroundColor: {
         default: '#E9ECF2',
-        boxBack: '#F2F3F5'
+        boxBack: '#F2F3F5',
+        gray: '#999'
       }
     },
     fontSize: {
@@ -87,6 +89,7 @@ module.exports = {
       full: '100%'
     },
     height: {
+      0: '0px',
       1: '1px',
       2: '2px',
       4: '4px',
@@ -125,7 +128,8 @@ module.exports = {
       489: '489px',
       500: '500px',
       560: '560px',
-      full: '100%'
+      full: '100%',
+      vh: '100vh'
     },
     maxHeight: {
       332: '332px'
@@ -220,7 +224,8 @@ module.exports = {
       primary: '#E9ECF2'
     },
     cursor: {
-      pointer: 'pointer'
+      pointer: 'pointer',
+      move: 'move'
     },
     textColor: {
       default: '#242426',
