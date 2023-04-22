@@ -1,39 +1,3 @@
-import { zdmCaptcha } from 'zdm-utils'
-
-/**
- * 极验
- * @method geetestAction
- *
- * @return {undefined} 返回 无
- */
-export const geetestAction = () => {
-  return new Promise((resolve, reject) => {
-    // 极验初始化
-    zdmCaptcha({
-      url: '/api/v1/verification/get_geetest?rand=1624428448921&scene=mobile_code',
-      scene: 'mobile_code', // 场景 active：活动交互, login：登录注册, mobile_code: 验证码, ta_index：他人主页
-      readyCallBack: () => {
-        // 此处写初始化成功后，准备好的逻辑
-        // 调起极验弹窗
-        if (window.geetestObj) {
-          window.geetestObj.verify()
-        }
-      },
-      successCallBack: (result: Record<string, string>) => {
-        // 此处写验证成功后执行的逻辑
-        // 重置极验弹窗
-        window.geetestObj.reset()
-        resolve(result)
-      },
-      closeCallBack: () => {
-        // 此处写关闭验证弹窗执行的逻辑
-        // eslint-disable-next-line prefer-promise-reject-errors
-        reject()
-      }
-    })
-  })
-}
-
 /**
  * 获取url参数
  */

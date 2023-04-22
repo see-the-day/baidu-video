@@ -26,7 +26,6 @@ specifiers:
   stylelint: ^14.16.1
   stylelint-config-standard: ^29.0.0
   stylelint-order: ^6.0.1
-  svgaplayerweb: ^2.3.2
   tailwindcss: ^3.2.4
   typescript: ^4.4.3
   vfonts: ^0.1.0
@@ -34,15 +33,12 @@ specifiers:
   vue: ^3.2.31
   vue-router: ^4.0.11
   vue-tsc: ^0.3.0
-  zdm-utils: ^2.0.28
 
 dependencies:
   axios: 0.21.4
   pinia: 2.0.35_typescript@4.9.5+vue@3.2.47
-  svgaplayerweb: 2.3.2
   vue: 3.2.47
   vue-router: 4.1.6_vue@3.2.47
-  zdm-utils: 2.0.48
 
 devDependencies:
   '@tailwindcss/postcss7-compat': 2.2.17
@@ -446,10 +442,6 @@ packages:
   /@types/json5/0.0.29:
     resolution: {integrity: sha1-7ihweulOEdK4J7y+UnC86n8+ce4=}
     dev: true
-
-  /@types/jsonp/0.2.1:
-    resolution: {integrity: sha1-Ppf2lFRrz6ptxP2GkwKxRpg2tlE=}
-    dev: false
 
   /@types/katex/0.14.0:
     resolution: {integrity: sha512-+2FW2CcT0K3P+JMR8YG846bmDwplKUTsWgT2ENwdQ1UdVfRk3GQrh6Mi4sTopy30gI8Uau5CEqHTDZ6YvWIUPA==}
@@ -1242,10 +1234,6 @@ packages:
       which: 2.0.2
     dev: true
 
-  /crypto-js/4.1.1:
-    resolution: {integrity: sha1-nkhbzwNSEEG9hYRHhrg/t2GXNs8=}
-    dev: false
-
   /css-color-names/0.0.4:
     resolution: {integrity: sha1-gIrcLnnPhHOAabZGyyDsJ762KeA=}
     dev: true
@@ -1292,12 +1280,6 @@ packages:
     resolution: {integrity: sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==}
     engines: {node: '>=0.11'}
     dev: true
-
-  /debug/2.6.9:
-    resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
-    dependencies:
-      ms: 2.0.0
-    dev: false
 
   /debug/3.2.7:
     resolution: {integrity: sha1-clgLfpFF+zm2Z2+cXl+xALk0F5o=}
@@ -1435,10 +1417,6 @@ packages:
       '@emmetio/abbreviation': 2.3.1
       '@emmetio/css-abbreviation': 2.1.6
     dev: true
-
-  /emoji-regex/10.2.1:
-    resolution: {integrity: sha512-97g6QgOk8zlDRdgq1WxwgTMgEWGVAQvB5Fdpgc1MkNy56la5SKP9GsMXKDOdqwn90/41a8yPwIGk1Y6WVbeMQA==}
-    dev: false
 
   /emoji-regex/8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
@@ -2760,12 +2738,6 @@ packages:
       graceful-fs: 4.2.11
     dev: true
 
-  /jsonp/0.2.1:
-    resolution: {integrity: sha1-pltPoPEL2nGaBUQep7lMVfPhW64=}
-    dependencies:
-      debug: 2.6.9
-    dev: false
-
   /jstransformer/1.0.0:
     resolution: {integrity: sha1-7Yvwkh4vPx7U1cGkT2hwntJHIsM=}
     dependencies:
@@ -3066,10 +3038,6 @@ packages:
     resolution: {integrity: sha1-2o6AFA2SIUJr1PclxuESg9NPkLc=}
     engines: {node: '>=6'}
     dev: true
-
-  /ms/2.0.0:
-    resolution: {integrity: sha1-VgiurfwAvmwpAd9fmGF4jeDVl8g=}
-    dev: false
 
   /ms/2.1.2:
     resolution: {integrity: sha1-0J0fNXtEP0kzgqjrPM0YOHKuYAk=}
@@ -4391,10 +4359,6 @@ packages:
     resolution: {integrity: sha1-WPcc7jvVGbWdSyqEO2x95krAR2Q=}
     dev: true
 
-  /svgaplayerweb/2.3.2:
-    resolution: {integrity: sha1-FVlbjcwgz03krcMQOXC3z1rhmoQ=}
-    dev: false
-
   /table/6.8.1:
     resolution: {integrity: sha512-Y4X9zqrCftUhMeH2EptSSERdVKt/nEdijTOacGD/97EKjhQ/Qs8RTlEGABSJNNN8lac9kheH+af7yAkEWlgneA==}
     engines: {node: '>=10.0.0'}
@@ -4890,10 +4854,6 @@ packages:
       vue: 3.2.47
     dev: true
 
-  /weixin-js-sdk/1.6.0:
-    resolution: {integrity: sha1-/1BITYEYzhII8RJIz0ocCDFXdRQ=}
-    dev: false
-
   /which-boxed-primitive/1.0.2:
     resolution: {integrity: sha1-E3V7yJsgmwSf5dhkMOIc9AqJqOY=}
     dependencies:
@@ -5024,16 +4984,3 @@ packages:
     resolution: {integrity: sha1-ApTrPe4FAo0x7hpfosVWpqrxChs=}
     engines: {node: '>=10'}
     dev: true
-
-  /zdm-utils/2.0.48:
-    resolution: {integrity: sha512-cqCS1TSbeK8yXm4nFi1QQfZz8lxw0tFHn2aHZ/VIdB0WFgzlN16TNfMfKzcnlMONAwqVAzHrPuK2YqdadAjIAQ==}
-    dependencies:
-      '@types/jsonp': 0.2.1
-      axios: 0.21.4
-      crypto-js: 4.1.1
-      emoji-regex: 10.2.1
-      jsonp: 0.2.1
-      weixin-js-sdk: 1.6.0
-    transitivePeerDependencies:
-      - debug
-    dev: false
