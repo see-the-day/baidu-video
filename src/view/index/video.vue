@@ -9,7 +9,10 @@
         muted
         :src="url"
       ></video>
-      <textList class="absolute bottom-0 left-0 right-0 top-0"></textList>
+      <textList
+        :current-time="currentTime"
+        class="absolute bottom-0 left-0 right-0 top-0"
+      ></textList>
     </div>
   </div>
   <div class="flex justify-center border-t pb-6 pt-6">

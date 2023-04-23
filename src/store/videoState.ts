@@ -49,12 +49,8 @@ export const useState = defineStore('state', {
       })
       this.temporary.unshift(JSON.parse(JSON.stringify(this.temporary[0])))
     },
-    SET_TEXT(index: number, text: string, left: number, bottom: number) {
-      console.log(left, bottom)
-      text && (this.data[0].text[index].text = text)
-      left && (this.data[0].text[index].left = left)
-      bottom && (this.data[0].text[index].bottom = bottom)
-      console.log(this.data[0].text[index])
+    SET_TEXT(index: number, obj: Record<string, string | number>) {
+      this.data[0].text[index] = { ...this.data[0].text[index], ...obj }
     },
     UPDATE_VIDEO_URL(url: string) {
       this.temporary[0].firstImage = url
