@@ -1,5 +1,5 @@
 <template>
-  <div class="relative flex justify-around text-textWhite">
+  <div class="relative flex justify-between text-textWhite">
     <div
       v-for="scale of timeEnd"
       :key="scale"
