@@ -1,37 +1,46 @@
 <template>
   <div>
     <n-slider
-      v-for="(li, index) of list"
+      v-for="(li, index) of state.getLayerText"
       :key="index"
-      v-model:value="value"
-      :max="state.temporary[0]?.timeEnd || 0"
+      :value="getValue(index, 'text')"
+      :max="state.temporary[state.currentIndex]?.timeEnd || 0"
       range
       :step="1"
-      @update:value="updateValue($event, index)"
+      @update:value="updateValue($event, index, 'text')"
+    />
+    <n-slider
+      v-for="(li, index) of state.getLayerImg"
+      :key="index"
+      :value="getValue(index, 'img')"
+      :max="state.temporary[state.currentIndex]?.timeEnd || 0"
+      range
+      :step="1"
+      @update:value="updateValue($event, index, 'img')"
     />
   </div>
 </template>
 <script lang="ts" setup>
 import { NSlider } from 'naive-ui'
-import { ref, watch, computed } from 'vue'
 import { useState } from '@/store/videoState'
 
 const state = useState()
-watch(
-  () => state.data,
-  () => {
-    console.log(state.data)
-  },
-  { deep: true }
-)
 
-const list = computed(() => state.data[0]?.text || [])
-const value = ref([0, state.temporary[0]?.timeEnd || 0])
+const updateValue = (
+  valueList: number[],
+  index: number,
+  type: 'text' | 'img'
+) => {
+  const stateType = type === 'text' ? 'SET_TEXT' : 'SET_IMG'
 
-const updateValue = (valueList: number[], index: number) => {
-  state.SET_TEXT(index, {
+  state[stateType](index, {
     startTime: valueList[0] > valueList[1] ? valueList[1] : valueList[0],
     endTime: valueList[0] > valueList[1] ? valueList[0] : valueList[1]
   })
+}
+
+const getValue = (index: number, type: 'text' | 'img'): number[] => {
+  const { startTime, endTime } = state.data[state.currentIndex][type][index]
+  return [startTime || 0, endTime || 0] as number[]
 }
 </script>

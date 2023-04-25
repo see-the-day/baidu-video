@@ -1,12 +1,12 @@
 <template>
   <n-grid :x-gap="8" :y-gap="8" :cols="2">
     <n-grid-item
-      v-for="(obj, index) of list"
+      v-for="({ text }, index) of list"
       :key="index"
       class="flex h-70 cursor-pointer items-center justify-center border text-textWhite"
-      @click="addText(obj)"
+      @click="addText"
     >
-      <span>默认</span>
+      <span>{{ text }}</span>
     </n-grid-item>
   </n-grid>
 </template>
@@ -14,12 +14,11 @@
 import { NGrid, NGridItem } from 'naive-ui'
 import { useState } from '@/store/videoState'
 
-defineProps({
-  list: {
-    type: Array,
-    default: () => []
+const list = [
+  {
+    text: '默认'
   }
-})
+]
 
 const state = useState()
 const addText = () => {
