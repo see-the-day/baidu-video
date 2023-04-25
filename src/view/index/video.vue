@@ -23,7 +23,8 @@
       src="@/assets/cutting.png"
       @click="cutting"
     />
-    <exportVue></exportVue>
+    <preview class="ml-12"></preview>
+    <exportVue class="ml-12"></exportVue>
   </div>
   <div class="relative h-244 w-full border-t">
     <timeLine v-model="currentTime"></timeLine>
@@ -39,6 +40,7 @@ import pausePng from '@/assets/pause.png'
 import layerList from './layerList.vue'
 import trackVue from './track.vue'
 import exportVue from './export.vue'
+import preview from './preview.vue'
 
 const myVideo = ref<HTMLVideoElement>({} as HTMLVideoElement)
 

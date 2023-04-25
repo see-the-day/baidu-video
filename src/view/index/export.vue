@@ -1,7 +1,7 @@
 <template>
   <div>
     <img
-      class="ml-12 h-16 w-16 cursor-pointer"
+      class="h-16 w-16 cursor-pointer"
       src="@/assets/export.png"
       @click="exportText"
     />
