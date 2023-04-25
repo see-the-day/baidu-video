@@ -22,7 +22,12 @@
       >
         {{ li.text }}
       </span>
-      <img v-if="li.type === 'img'" class="h-36 w-36" :src="li.img" />
+      <img
+        v-if="li.type === 'img'"
+        :style="`transform: rotate(${li.rotation}deg) scale(${li.scale})`"
+        class="h-36 w-36"
+        :src="li.img"
+      />
     </div>
   </div>
 </template>

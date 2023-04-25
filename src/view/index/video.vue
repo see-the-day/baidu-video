@@ -83,11 +83,14 @@ const play = () => {
   isPlay.value = !isPlay.value
 }
 
+const url = computed(() => state.temporary[state.currentIndex]?.url)
+
 const startTime = computed(() => state.getStartTime)
 const endTime = computed(() => state.getEndTime)
 const currentTime = ref(0)
 const getVideoCurrentTime = () => {
   myVideo.value.addEventListener('timeupdate', () => {
+    if (!url.value) return
     currentTime.value = myVideo.value.currentTime
     state.ADD_TIME(currentTime.value, Math.ceil(timeEnd.value))
     if (currentTime.value >= endTime.value) {
@@ -98,8 +101,6 @@ const getVideoCurrentTime = () => {
   })
 }
 
-const url = computed(() => state.temporary[state.currentIndex]?.url)
-
 watch(
   () => state.currentIndex,
   () => {
@@ -107,8 +108,11 @@ watch(
   }
 )
 watch(url, () => {
-  getVideoDate()
-  getVideoCurrentTime()
+  if (url.value) {
+    console.log(222)
+    getVideoDate()
+    getVideoCurrentTime()
+  }
 })
 
 const cutting = () => {

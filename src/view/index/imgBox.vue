@@ -4,7 +4,7 @@
       v-for="({ img }, index) of list"
       :key="index"
       class="flex h-70 cursor-pointer items-center justify-center border text-textWhite"
-      @click="addText(img)"
+      @click="addImg(img)"
     >
       <span>默认</span>
     </n-grid-item>
@@ -18,7 +18,7 @@ import vueImg from '@/assets/map-img/logo.svg'
 const list = [{ img: vueImg }]
 
 const state = useState()
-const addText = (img: string) => {
+const addImg = (img: string) => {
   state.ADD_IMG(img)
 }
 </script>

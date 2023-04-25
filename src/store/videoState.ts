@@ -9,6 +9,7 @@ export const useState = defineStore('state', {
     boxIndex: number
     textIndex: number
     imgIndex: number
+    statusMap: any[]
   } => ({
     data: [],
     temporary: [],
@@ -19,7 +20,8 @@ export const useState = defineStore('state', {
     // 当前选中文本 index
     textIndex: 0,
     // 当前选中图片 index
-    imgIndex: 0
+    imgIndex: 0,
+    statusMap: []
   }),
   getters: {
     getStartTime: (state) => {
@@ -96,6 +98,8 @@ export const useState = defineStore('state', {
         endTime: this.getEndTime,
         img,
         left: 0,
+        rotation: 0,
+        scale: '',
         top: 0
       })
       this.temporary.unshift(
@@ -137,6 +141,33 @@ export const useState = defineStore('state', {
     SET_IMG_INDEX(index: number) {
       this.imgIndex = index
     },
-    ADD_STATUS_MAP() {}
+    ADD_STATUS_MAP() {
+      this.statusMap.unshift(
+        JSON.parse(
+          JSON.stringify({
+            data: this.data,
+            temporary: this.temporary,
+            currentIndex: this.currentIndex,
+            boxIndex: this.boxIndex,
+            textIndex: this.textIndex,
+            imgIndex: this.imgIndex
+          })
+        )
+      )
+      console.log(this.statusMap)
+    },
+    CANCEL_STATUS_MAP() {
+      this.statusMap.shift()
+      console.log(this.statusMap)
+      if (!this.statusMap.length) return
+      const { data, temporary, currentIndex, boxIndex, textIndex, imgIndex } =
+        this.statusMap[0]
+      this.data = JSON.parse(JSON.stringify(data))
+      this.temporary = JSON.parse(JSON.stringify(temporary))
+      this.currentIndex = JSON.parse(JSON.stringify(currentIndex))
+      this.boxIndex = JSON.parse(JSON.stringify(boxIndex))
+      this.textIndex = JSON.parse(JSON.stringify(textIndex))
+      this.imgIndex = JSON.parse(JSON.stringify(imgIndex))
+    }
   }
 })

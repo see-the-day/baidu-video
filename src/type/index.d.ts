@@ -13,6 +13,8 @@ export interface DATA_IMG {
   img?: string
   left: number
   top: number
+  rotation: number
+  scale: string
 }
 
 export type PERSON_TEXT = Partial<DATA_TEXT>

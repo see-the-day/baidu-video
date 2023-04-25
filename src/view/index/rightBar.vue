@@ -16,7 +16,7 @@
           class="mb-12"
         ></n-input-number>
       </div>
-      <div>
+      <div v-if="state.boxIndex === 2">
         <span class="mb-12 text-textWhite">文案</span>
         <NInput v-model:value="data.text" :precision="0" class="mb-12"></NInput>
         <span class="mb-12 text-textWhite">颜色</span>
@@ -30,6 +30,22 @@
           class="mb-12"
         ></n-input-number>
       </div>
+      <div v-if="state.boxIndex === 4">
+        <span class="mb-12 text-textWhite">放大</span>
+        <NInput
+          v-model:value="data.scale"
+          :precision="0.1"
+          class="mb-12"
+        ></NInput>
+        <span class="mb-12 text-textWhite">旋转</span>
+        <n-input-number
+          v-model:value="data.rotation"
+          :precision="0"
+          :min="0"
+          :max="360"
+          class="mb-12"
+        ></n-input-number>
+      </div>
       <n-button type="error" @click="deleteBox"> 删除 </n-button>
     </template>
   </div>
@@ -38,11 +54,11 @@
 import { watch, ref, computed } from 'vue'
 import { NButton, NInputNumber, NInput, NColorPicker } from 'naive-ui'
 import { useState } from '@/store/videoState'
-import { DATA_TEXT } from '@/type/index'
+import { DATA_TEXT, DATA_IMG } from '@/type/index'
 
 const state = useState()
 
-const data = ref<DATA_TEXT | null>(null)
+const data = ref<(DATA_TEXT & DATA_IMG) | null>(null)
 
 const index = computed(() =>
   state.boxIndex === 2 ? state.textIndex : state.imgIndex
@@ -81,7 +97,7 @@ watch(
         JSON.stringify(state[gettersKey][index.value]) !==
         JSON.stringify(data.value)
       ) {
-        data.value = { ...(state[gettersKey][index.value] || {}) }
+        data.value = { ...(state[gettersKey][index.value] || {}) } as any
       }
     }
   },
