@@ -80,7 +80,7 @@ export const useState = defineStore('state', {
     },
     ADD_TEXT() {
       this.data[this.currentIndex].text.push({
-        startTime: this.getStartTime,
+        startTime: 0,
         endTime: this.getEndTime,
         text: '默认文案',
         color: '#000',
@@ -91,7 +91,7 @@ export const useState = defineStore('state', {
     },
     ADD_IMG(img: string) {
       this.data[this.currentIndex].img.push({
-        startTime: this.getStartTime,
+        startTime: 0,
         endTime: this.getEndTime,
         img,
         left: 0,

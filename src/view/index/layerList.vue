@@ -8,13 +8,13 @@
       "
       :key="index"
       class="absolute p-4"
-      :class="{ 'border border-primary': isBorder(li.type, index) }"
+      :class="{ 'border border-primary': isBorder(li.type, li.index) }"
       :style="{ left: `${li.left}px`, top: `${li.top}px` }"
       @mouseup="handleMouseUp"
       @mousedown="handleMouseDown"
       @mouseleave="mouseover"
-      @mousemove="mousemove($event, index, li.type)"
-      @click="currentEditElement(index, li.type)"
+      @mousemove="mousemove($event, li.index, li.type)"
+      @click="currentEditElement(li.index, li.type)"
     >
       <span
         v-if="li.type === 'text'"
@@ -56,11 +56,11 @@ const currentEditElement = (index: number, type: 'text' | 'img') => {
 }
 const list = computed(() => {
   const listMap: Record<string, any>[] = []
-  state.getLayerText.forEach((obj) => {
-    listMap.push({ ...obj, type: 'text' })
+  state.getLayerText.forEach((obj, index) => {
+    listMap.push({ ...obj, type: 'text', index })
   })
-  state.getLayerImg.forEach((obj) => {
-    listMap.push({ ...obj, type: 'img' })
+  state.getLayerImg.forEach((obj, index) => {
+    listMap.push({ ...obj, type: 'img', index })
   })
   return listMap
 })
