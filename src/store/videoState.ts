@@ -61,6 +61,10 @@ export const useState = defineStore('state', {
         timeEnd: 0
       })
     },
+    DELETE_VIDEO(index: number) {
+      this.data.splice(index, 1)
+      this.temporary.splice(index, 1)
+    },
     CHANGE_DATA(newIndex: number, oldIndex: number) {
       ;[this.data[newIndex], this.data[oldIndex]] = [
         this.data[oldIndex],

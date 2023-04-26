@@ -9,10 +9,15 @@
   >
     <template #item="{ element, index }">
       <div
-        class="handle mb-4 mr-4 h-70 w-110 border p-4"
+        class="handle relative mb-4 mr-4 h-70 w-110 border p-4"
         :class="{ 'border-primary': index === state.currentIndex }"
         @click="selectImage(index)"
       >
+        <img
+          src="@/assets/delete.png"
+          class="right-minus-12 top-minus-12 absolute h-24 w-24 cursor-pointer"
+          @click="deleteVideo(index)"
+        />
         <img :src="element.firstImage" class="h-full w-full" />
       </div>
     </template>
@@ -58,7 +63,10 @@ const log = ({
 }) => {
   state.SET_CURRENT_INDEX(newIndex)
   state.CHANGE_DATA(newIndex, oldIndex)
-  console.log(state.data)
+}
+
+const deleteVideo = (index: number) => {
+  state.DELETE_VIDEO(index)
 }
 
 const selectImage = (index: number) => {

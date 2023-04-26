@@ -167,6 +167,7 @@ module.exports = {
     inset: {
       'n-2': '-2px',
       'minus-4': '-4px',
+      'minus-12': '-12px',
       0: 0,
       3: '3px',
       10: '10px',
