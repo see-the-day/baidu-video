@@ -82,7 +82,7 @@ const isShow = computed(() => [2, 4].includes(state.boxIndex))
 watch(
   data,
   () => {
-    if (isShow.value) {
+    if (isShow.value && data.value && Object.keys(data.value).length) {
       updateData()
     }
   },

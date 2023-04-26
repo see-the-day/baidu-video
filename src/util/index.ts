@@ -45,6 +45,5 @@ export function getNowTime(val: string | number) {
     date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds()
   const milliSeconds = date.getMilliseconds() // 毫秒
   const currentTime = `${hour}:${minute}:${second}.${milliSeconds}`
-  console.log(currentTime)
   return currentTime
 }

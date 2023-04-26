@@ -61,6 +61,12 @@ export const useState = defineStore('state', {
         timeEnd: 0
       })
     },
+    CHANGE_DATA(newIndex: number, oldIndex: number) {
+      ;[this.data[newIndex], this.data[oldIndex]] = [
+        this.data[oldIndex],
+        this.data[newIndex]
+      ]
+    },
     PARTITION_CHANGE() {
       this.data[this.currentIndex].partition = {
         startTime: this.getStartTime,
@@ -73,9 +79,6 @@ export const useState = defineStore('state', {
       this.temporary[this.currentIndex].timeEnd = timeEnd
     },
     ADD_TEXT() {
-      this.data.unshift(
-        JSON.parse(JSON.stringify(this.data[this.currentIndex]))
-      )
       this.data[this.currentIndex].text.push({
         startTime: this.getStartTime,
         endTime: this.getEndTime,
@@ -85,14 +88,8 @@ export const useState = defineStore('state', {
         left: 0,
         top: 0
       })
-      this.temporary.unshift(
-        JSON.parse(JSON.stringify(this.temporary[this.currentIndex]))
-      )
     },
     ADD_IMG(img: string) {
-      this.data.unshift(
-        JSON.parse(JSON.stringify(this.data[this.currentIndex]))
-      )
       this.data[this.currentIndex].img.push({
         startTime: this.getStartTime,
         endTime: this.getEndTime,
@@ -102,9 +99,6 @@ export const useState = defineStore('state', {
         scale: '',
         top: 0
       })
-      this.temporary.unshift(
-        JSON.parse(JSON.stringify(this.temporary[this.currentIndex]))
-      )
     },
     SET_TEXT(index: number, obj: PERSON_TEXT) {
       this.data[this.currentIndex].text[index] = {
@@ -154,11 +148,9 @@ export const useState = defineStore('state', {
           })
         )
       )
-      console.log(this.statusMap)
     },
     CANCEL_STATUS_MAP() {
       this.statusMap.shift()
-      console.log(this.statusMap)
       if (!this.statusMap.length) return
       const { data, temporary, currentIndex, boxIndex, textIndex, imgIndex } =
         this.statusMap[0]

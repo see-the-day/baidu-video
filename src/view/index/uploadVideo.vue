@@ -1,31 +1,37 @@
 <template>
-  <n-grid :x-gap="8" :y-gap="8" :cols="2">
-    <n-grid-item>
-      <n-upload
-        class="h-70 border"
-        :show-file-list="false"
-        :default-upload="false"
-        @change="finish"
+  <Draggable
+    :list="list"
+    item-key="name"
+    class="list-group flex flex-1 flex-wrap"
+    handle=".handle"
+    :animation="100"
+    @change="log"
+  >
+    <template #item="{ element, index }">
+      <div
+        class="handle mb-4 mr-4 h-70 w-110 border p-4"
+        :class="{ 'border-primary': index === state.currentIndex }"
+        @click="selectImage(index)"
       >
-        <div class="flex h-70 cursor-pointer items-center justify-center">
-          <img src="@/assets/upload.png" class="h-24 w-20" />
-        </div>
-      </n-upload>
-    </n-grid-item>
-    <n-grid-item
-      v-for="({ firstImage }, index) of list"
-      :key="firstImage"
-      class="h-70 border p-4"
-      :class="{ 'border-primary': index === state.currentIndex }"
-      @click="selectImage(index)"
-    >
-      <img :src="firstImage" class="h-full w-full" />
-    </n-grid-item>
-  </n-grid>
+        <img :src="element.firstImage" class="h-full w-full" />
+      </div>
+    </template>
+  </Draggable>
+  <n-upload
+    class="h-70 border"
+    :show-file-list="false"
+    :default-upload="false"
+    @change="finish"
+  >
+    <div class="flex h-70 cursor-pointer items-center justify-center">
+      <img src="@/assets/upload.png" class="h-24 w-20" />
+    </div>
+  </n-upload>
 </template>
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { NUpload, UploadFileInfo, NGrid, NGridItem } from 'naive-ui'
+import { NUpload, UploadFileInfo } from 'naive-ui'
+import Draggable from 'vuedraggable'
 import { useState } from '@/store/videoState'
 
 const state = useState()
@@ -44,6 +50,15 @@ const finish = (file: { file: UploadFileInfo }) => {
       Math.ceil(fileElement.duration)
     )
   })
+}
+const log = ({
+  moved: { newIndex, oldIndex }
+}: {
+  moved: { newIndex: number; oldIndex: number }
+}) => {
+  state.SET_CURRENT_INDEX(newIndex)
+  state.CHANGE_DATA(newIndex, oldIndex)
+  console.log(state.data)
 }
 
 const selectImage = (index: number) => {

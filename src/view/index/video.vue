@@ -46,35 +46,37 @@ const myVideo = ref<HTMLVideoElement>({} as HTMLVideoElement)
 
 const state = useState()
 // 当前帧转成图片
-const getFirstImg = (startTime: number = 0) => {
-  myVideo.value.currentTime = startTime
+const setImg = () => {
   myVideo.value.pause()
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d')
-
-  myVideo.value?.addEventListener('canplay', () => {
-    canvas.width = myVideo.value.videoWidth
-    canvas.height = myVideo.value.videoHeight
-    ctx?.drawImage(myVideo.value, 0, 0, canvas.width, canvas.height)
-    const imgBase64 = canvas.toDataURL('image/png')
-    state.STE_VIDEO_URL(imgBase64)
-  })
+  canvas.width = myVideo.value.videoWidth
+  canvas.height = myVideo.value.videoHeight
+  ctx?.drawImage(myVideo.value, 0, 0, canvas.width, canvas.height)
+  const imgBase64 = canvas.toDataURL('image/png')
+  state.STE_VIDEO_URL(imgBase64)
+}
+const getFirstImg = (startTime?: number) => {
+  myVideo.value.currentTime = startTime || state.getStartTime
+  if (state.temporary[state.currentIndex].firstImage) return
+  myVideo.value?.addEventListener('canplay', setImg)
 }
 
 // 文件加载完成获取总时间
 const timeEnd = ref(0)
+const getDuration = () => {
+  const { duration } = myVideo.value // 获取当前播放时间
+
+  getFirstImg()
+
+  // 如果当前传入时间为0，则默认当前视频时间
+  if (!timeEnd.value) {
+    timeEnd.value = duration
+    state.ADD_TIME(0, Math.ceil(duration))
+  }
+}
 const getVideoDate = () => {
-  myVideo.value.addEventListener('loadedmetadata', () => {
-    const { duration } = myVideo.value // 获取当前播放时间
-
-    getFirstImg()
-
-    // 如果当前传入时间为0，则默认当前视频时间
-    if (!timeEnd.value) {
-      timeEnd.value = duration
-      state.ADD_TIME(0, Math.ceil(duration))
-    }
-  })
+  myVideo.value.addEventListener('loadedmetadata', getDuration)
 }
 
 const isPlay = ref(false)
@@ -88,19 +90,25 @@ const url = computed(() => state.temporary[state.currentIndex]?.url)
 const startTime = computed(() => state.getStartTime)
 const endTime = computed(() => state.getEndTime)
 const currentTime = ref(0)
+const getVideoTime = () => {
+  if (!url.value) return
+  currentTime.value = myVideo.value.currentTime
+  state.ADD_TIME(currentTime.value, Math.ceil(timeEnd.value))
+  if (currentTime.value >= endTime.value) {
+    currentTime.value = startTime.value
+    myVideo.value.currentTime = startTime.value
+    play()
+  }
+}
 const getVideoCurrentTime = () => {
-  myVideo.value.addEventListener('timeupdate', () => {
-    if (!url.value) return
-    currentTime.value = myVideo.value.currentTime
-    state.ADD_TIME(currentTime.value, Math.ceil(timeEnd.value))
-    if (currentTime.value >= endTime.value) {
-      currentTime.value = startTime.value
-      myVideo.value.currentTime = startTime.value
-      play()
-    }
-  })
+  myVideo.value.addEventListener('timeupdate', getVideoTime)
 }
 
+const clearListener = () => {
+  myVideo.value.removeEventListener('timeupdate', getVideoTime, false)
+  myVideo.value.removeEventListener('loadedmetadata', getDuration, false)
+  myVideo.value?.removeEventListener('canplay', setImg, false)
+}
 watch(
   () => state.currentIndex,
   () => {
@@ -109,7 +117,7 @@ watch(
 )
 watch(url, () => {
   if (url.value) {
-    console.log(222)
+    clearListener()
     getVideoDate()
     getVideoCurrentTime()
   }
