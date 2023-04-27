@@ -31,7 +31,8 @@
           <n-slider
             :value="currentTime"
             :max="state.temporary[state.currentIndex]?.timeEnd || 0"
-            :step="1"
+            :step="0.1"
+            :format-tooltip="formatTooltip"
             @update:value="updateValue"
           />
         </div>
@@ -50,6 +51,8 @@ import pausePng from '@/assets/pause.png'
 const state = useState()
 
 const url = computed(() => state.temporary[state.currentIndex]?.url)
+
+const formatTooltip = (value: number) => value.toFixed(1)
 
 const isPlay = ref(false)
 const previewVideo = ref<HTMLVideoElement>({} as HTMLVideoElement)

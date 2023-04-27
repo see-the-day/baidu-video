@@ -35,6 +35,7 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { useState } from '@/store/videoState'
+import { DATA_TEXT } from '@/type/index'
 
 const state = useState()
 
@@ -56,10 +57,10 @@ const currentEditElement = (index: number, type: 'text' | 'img') => {
 }
 const list = computed(() => {
   const listMap: Record<string, any>[] = []
-  state.getLayerText.forEach((obj, index) => {
+  state.getLayerText.forEach((obj: DATA_TEXT, index: number) => {
     listMap.push({ ...obj, type: 'text', index })
   })
-  state.getLayerImg.forEach((obj, index) => {
+  state.getLayerImg.forEach((obj: DATA_TEXT, index: number) => {
     listMap.push({ ...obj, type: 'img', index })
   })
   return listMap

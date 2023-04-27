@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { DATA, TEMPORARY, PERSON_TEXT, PERSON_IMG } from '@/type/index'
+import { isAddTextLine } from '@/util/index'
 
 export const useState = defineStore('state', {
   state: (): {
@@ -38,6 +39,14 @@ export const useState = defineStore('state', {
     },
     getLayerImg: (state) => {
       return state.data[state.currentIndex]?.img || []
+    },
+    getLineStartTime(): number {
+      return this.getCurrentTime - 5 > 0 ? this.getCurrentTime - 5 : 0
+    },
+    getLineEndTime(): number {
+      return this.getCurrentTime + 5 > this.getEndTime
+        ? this.getEndTime
+        : this.getCurrentTime + 5
     }
   },
   actions: {
@@ -84,8 +93,8 @@ export const useState = defineStore('state', {
     },
     ADD_TEXT() {
       this.data[this.currentIndex].text.push({
-        startTime: 0,
-        endTime: this.getEndTime,
+        startTime: this.getLineStartTime,
+        endTime: this.getLineEndTime,
         text: '默认文案',
         color: '#000',
         fontSize: 14,
@@ -94,9 +103,19 @@ export const useState = defineStore('state', {
       })
     },
     ADD_IMG(img: string) {
+      if (
+        !isAddTextLine(
+          this.data[this.currentIndex].img,
+          this.getLineStartTime,
+          this.getLineEndTime
+        )
+      ) {
+        window.$message.error('相同时间贴图最多出现三个')
+        return false
+      }
       this.data[this.currentIndex].img.push({
-        startTime: 0,
-        endTime: this.getEndTime,
+        startTime: this.getLineStartTime,
+        endTime: this.getLineEndTime,
         img,
         left: 0,
         rotation: 0,
@@ -111,6 +130,10 @@ export const useState = defineStore('state', {
       }
     },
     SET_IMG(index: number, obj: PERSON_IMG) {
+      if (!isAddTextLine(this.data[this.currentIndex].img)) {
+        window.$message.error('相同时间贴图最多出现三个')
+        return false
+      }
       this.data[this.currentIndex].img[index] = {
         ...this.data[this.currentIndex].img[index],
         ...obj

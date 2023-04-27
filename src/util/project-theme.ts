@@ -20,6 +20,9 @@ const themeOverrides: GlobalThemeOverrides = {
         textColor: '#F04848'
       }
     }
+  },
+  Slider: {
+    handleSize: '8px'
   }
 }
 

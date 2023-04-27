@@ -1,49 +1,26 @@
-export interface videoRef {
-  // 其他冗余字段
-  [propName: string]: any
-  // 数字值，表示当前播放的时间，以秒计
-  currentTime: number
-}
-export class cropFilter {
-  // 结束按钮距离左侧距离
-  endLeft: string | number = 0
+import { DATA_IMG } from '@/type/index'
 
-  // 结束按钮初始位置
-  endright: string | number = 0
-
-  // 开始按钮距离左侧距离
-  startLeft: string | number = 0
-
-  // 毫秒/px(1px===的毫秒数)
-  roal: string | number = 0
-
-  // 开始时间
-  startTime: string | number = 0
-
-  // 结束时间
-  endTime: string | number = 0
-
-  // 时间轴显示时间数组
-  timeList: string[] = []
-}
-
-// 日期字符串转成时间戳
-export function dateStrChangeTimeTamp(dateStr: string) {
-  dateStr = dateStr.substring(0, 23)
-  dateStr = dateStr.replace(/-/g, '/')
-  const timeTamp = new Date(dateStr).getTime()
-  return timeTamp
-}
-// 精准到毫秒
-export function getNowTime(val: string | number) {
-  const date = new Date(val)
-  const hour =
-    date.getHours() - 8 < 10 ? `0${date.getHours() - 8}` : date.getHours() - 8
-  const minute =
-    date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()
-  const second =
-    date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds()
-  const milliSeconds = date.getMilliseconds() // 毫秒
-  const currentTime = `${hour}:${minute}:${second}.${milliSeconds}`
-  return currentTime
+export const isAddTextLine = (
+  dataImg: DATA_IMG[],
+  startTime: number = 0,
+  endTime: number = 0
+): boolean => {
+  const map: Record<string, number> = {}
+  const data = [...dataImg, { startTime, endTime }]
+  for (let length = 0; length < data.length; length++) {
+    const obj = data[length]
+    const start = (obj?.startTime || 0) * 10
+    const end = (obj?.endTime || 0) * 10
+    for (let i = start; i < end; i++) {
+      if (map[i / 10] >= 3) {
+        return false
+      }
+      if (map[i / 10]) {
+        map[i / 10] += 1
+      } else {
+        map[i / 10] = 1
+      }
+    }
+  }
+  return true
 }
