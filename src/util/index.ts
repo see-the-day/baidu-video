@@ -3,7 +3,8 @@ import { DATA_IMG } from '@/type/index'
 export const isAddTextLine = (
   dataImg: DATA_IMG[],
   startTime: number = 0,
-  endTime: number = 0
+  endTime: number = 0,
+  frequency: number = 3
 ): boolean => {
   const map: Record<string, number> = {}
   const data = [...dataImg, { startTime, endTime }]
@@ -12,7 +13,7 @@ export const isAddTextLine = (
     const start = (obj?.startTime || 0) * 10
     const end = (obj?.endTime || 0) * 10
     for (let i = start; i < end; i++) {
-      if (map[i / 10] >= 3) {
+      if (map[i / 10] >= frequency) {
         return false
       }
       if (map[i / 10]) {

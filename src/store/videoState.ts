@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { DATA, TEMPORARY, PERSON_TEXT, PERSON_IMG } from '@/type/index'
 import { isAddTextLine } from '@/util/index'
 
+let timeout: ReturnType<typeof setTimeout>
 export const useState = defineStore('state', {
   state: (): {
     data: DATA[]
@@ -130,9 +131,19 @@ export const useState = defineStore('state', {
       }
     },
     SET_IMG(index: number, obj: PERSON_IMG) {
-      if (!isAddTextLine(this.data[this.currentIndex].img)) {
-        window.$message.error('相同时间贴图最多出现三个')
-        return false
+      if (
+        !isAddTextLine(
+          this.data[this.currentIndex].img,
+          obj.startTime || 0,
+          obj.endTime || 0,
+          4
+        )
+      ) {
+        clearTimeout(timeout)
+        timeout = setTimeout(() => {
+          window.$message.error('相同时间贴图最多出现三个')
+        }, 300)
+        return
       }
       this.data[this.currentIndex].img[index] = {
         ...this.data[this.currentIndex].img[index],
