@@ -89,7 +89,7 @@ watch(
   { deep: true }
 )
 watch(
-  () => [state.data, state.boxIndex],
+  () => [state.data, state.boxIndex, state.imgIndex, state.textIndex],
   () => {
     if (isShow.value) {
       const gettersKey = state.boxIndex === 2 ? 'getLayerText' : 'getLayerImg'
