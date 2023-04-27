@@ -56,6 +56,9 @@ const getValue = (index: number, type: 'text' | 'img'): number[] => {
 </script>
 <style lang="scss" scoped>
 .track {
+  :deep(.n-slider-rail) {
+    background: #000 !important;
+  }
   :deep(.n-slider-handle) {
     width: 8px !important;
     height: 12px !important;
