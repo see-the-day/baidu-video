@@ -1,10 +1,15 @@
 <template>
   <div>
-    <img
-      class="h-16 w-16 cursor-pointer"
-      src="@/assets/preview.png"
-      @click="preview"
-    />
+    <n-tooltip trigger="hover">
+      <template #trigger>
+        <img
+          class="h-16 w-16 cursor-pointer"
+          src="@/assets/preview.png"
+          @click="preview"
+        />
+      </template>
+      预览
+    </n-tooltip>
     <n-modal
       v-model:show="showModal"
       display-directive="if"
@@ -41,7 +46,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { NModal, NSlider } from 'naive-ui'
+import { NModal, NSlider, NTooltip } from 'naive-ui'
 import { ref, computed, nextTick } from 'vue'
 import { useState } from '@/store/videoState'
 import layerList from './layerList.vue'

@@ -13,16 +13,26 @@
     </div>
   </div>
   <div class="flex justify-center border-t pb-6 pt-6">
-    <img
-      class="h-16 w-16 cursor-pointer"
-      :src="isPlay ? playPng : pausePng"
-      @click="play"
-    />
-    <img
-      class="ml-12 h-16 w-16 cursor-pointer"
-      src="@/assets/cutting.png"
-      @click="cutting"
-    />
+    <n-tooltip trigger="hover">
+      <template #trigger>
+        <img
+          class="h-16 w-16 cursor-pointer"
+          :src="isPlay ? playPng : pausePng"
+          @click="play"
+        />
+      </template>
+      {{ isPlay ? '暂停' : '播放' }}
+    </n-tooltip>
+    <n-tooltip trigger="hover">
+      <template #trigger>
+        <img
+          class="ml-12 h-16 w-16 cursor-pointer"
+          src="@/assets/cutting.png"
+          @click="cutting"
+        />
+      </template>
+      裁剪
+    </n-tooltip>
     <preview class="ml-12"></preview>
     <exportVue class="ml-12"></exportVue>
   </div>
@@ -33,6 +43,7 @@
 </template>
 <script lang="ts" setup>
 import { ref, computed, watch } from 'vue'
+import { NTooltip } from 'naive-ui'
 import timeLine from './timeLine.vue'
 import { useState } from '@/store/videoState'
 import playPng from '@/assets/play.png'
