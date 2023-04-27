@@ -13,13 +13,13 @@ export const isAddTextLine = (
     const start = (obj?.startTime || 0) * 10
     const end = (obj?.endTime || 0) * 10
     for (let i = start; i < end; i++) {
-      if (map[i / 10] >= frequency) {
+      if (map[i] >= frequency) {
         return false
       }
-      if (map[i / 10]) {
-        map[i / 10] += 1
+      if (map[i]) {
+        map[i] += 1
       } else {
-        map[i / 10] = 1
+        map[i] = 1
       }
     }
   }

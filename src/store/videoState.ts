@@ -143,7 +143,6 @@ export const useState = defineStore('state', {
         timeout = setTimeout(() => {
           window.$message.error('相同时间贴图最多出现三个')
         }, 300)
-        return
       }
       this.data[this.currentIndex].img[index] = {
         ...this.data[this.currentIndex].img[index],
