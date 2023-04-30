@@ -15,7 +15,7 @@
       >
         <img
           src="@/assets/delete.png"
-          class="right-minus-12 top-minus-12 absolute h-24 w-24 cursor-pointer"
+          class="absolute right-minus-12 top-minus-12 h-24 w-24 cursor-pointer"
           @click="deleteVideo(index)"
         />
         <img :src="element.firstImage" class="h-full w-full" />
@@ -62,7 +62,7 @@ const log = ({
   moved: { newIndex: number; oldIndex: number }
 }) => {
   state.SET_CURRENT_INDEX(newIndex)
-  state.CHANGE_DATA(newIndex, oldIndex)
+  state.CHANGE_DATA_DRAGGABLE(newIndex, oldIndex)
 }
 
 const deleteVideo = (index: number) => {

@@ -1,18 +1,10 @@
 import { defineStore } from 'pinia'
-import { DATA, TEMPORARY, PERSON_TEXT, PERSON_IMG } from '@/type/index'
+import { PERSON_TEXT, PERSON_IMG, VIDEO_DATA } from '@/type/index'
 import { isAddTextLine } from '@/util/index'
 
 let timeout: ReturnType<typeof setTimeout>
 export const useState = defineStore('state', {
-  state: (): {
-    data: DATA[]
-    temporary: TEMPORARY[]
-    currentIndex: number
-    boxIndex: number
-    textIndex: number
-    imgIndex: number
-    statusMap: any[]
-  } => ({
+  state: (): VIDEO_DATA => ({
     data: [],
     temporary: [],
     // 当前数据index
@@ -23,6 +15,8 @@ export const useState = defineStore('state', {
     textIndex: 0,
     // 当前选中图片 index
     imgIndex: 0,
+    // 字幕index
+    subtitleIndex: 0,
     statusMap: []
   }),
   getters: {
@@ -41,6 +35,9 @@ export const useState = defineStore('state', {
     getLayerImg: (state) => {
       return state.data[state.currentIndex]?.img || []
     },
+    getLayerSubtitle: (state) => {
+      return state.data[state.currentIndex]?.subtitle || []
+    },
     getLineStartTime(): number {
       return this.getCurrentTime - 5 > 0 ? this.getCurrentTime - 5 : 0
     },
@@ -51,6 +48,7 @@ export const useState = defineStore('state', {
     }
   },
   actions: {
+    // 当前视频状态，视频刚上传时触发
     SET_VIDEO(
       url: string,
       videoFile: File,
@@ -61,7 +59,7 @@ export const useState = defineStore('state', {
         videoFile, // 文件file
         partition: { startTime, endTime }, // 视频开始时间结束时间，分割视频用
         text: [], // 文字
-        subtitle: {}, // 字幕
+        subtitle: [], // 字幕
         img: [] // 贴图
       })
       this.temporary.unshift({
@@ -71,16 +69,24 @@ export const useState = defineStore('state', {
         timeEnd: 0
       })
     },
+    // 删除当前视频
     DELETE_VIDEO(index: number) {
       this.data.splice(index, 1)
       this.temporary.splice(index, 1)
     },
-    CHANGE_DATA(newIndex: number, oldIndex: number) {
+    // 存储当前视频首页图
+    STE_VIDEO_URL(url: string) {
+      this.temporary[this.currentIndex].firstImage = url
+    },
+    // 视频拖拽
+    CHANGE_DATA_DRAGGABLE(newIndex: number, oldIndex: number) {
       ;[this.data[newIndex], this.data[oldIndex]] = [
         this.data[oldIndex],
         this.data[newIndex]
       ]
     },
+
+    // 存储当前开始时间，结束时间
     PARTITION_CHANGE() {
       this.data[this.currentIndex].partition = {
         startTime: this.getStartTime,
@@ -88,9 +94,54 @@ export const useState = defineStore('state', {
       }
       this.temporary[this.currentIndex].currentTime = this.getStartTime
     },
+
+    // 存储当前视频时间以及视频结束时间
     ADD_TIME(currentTime: number, timeEnd: number) {
       this.temporary[this.currentIndex].currentTime = currentTime
       this.temporary[this.currentIndex].timeEnd = timeEnd
+    },
+
+    ADD_SUBTITLE(
+      subtitle: { startTime: number; endTime: number; text: string }[]
+    ) {
+      const length = (this.data[this.currentIndex].subtitle.length || 0) + 1
+      if (length > 2) {
+        window.$message.error('字幕最多存在两个')
+        return
+      }
+      this.data[this.currentIndex].subtitle.push({
+        top: 100,
+        left: 50,
+        color: '#000',
+        fontSize: 14,
+        data: subtitle,
+        text: `${length}`
+      })
+    },
+    SET_SUBTITLE_INDEX(index: number) {
+      this.subtitleIndex = index
+    },
+    SET_SUBTITLE_TIME(index: number, obj: PERSON_TEXT) {
+      this.data[this.currentIndex].subtitle[this.subtitleIndex].data[index] = {
+        ...this.data[this.currentIndex].subtitle[this.subtitleIndex].data[
+          index
+        ],
+        ...obj
+      }
+    },
+    SET_SUBTITLE(index: number, obj: PERSON_TEXT) {
+      this.data[this.currentIndex].subtitle[index] = {
+        ...this.data[this.currentIndex].subtitle[index],
+        ...obj
+      }
+    },
+    DELETE_SUBTITLE() {
+      this.data[this.currentIndex].subtitle.splice(this.subtitleIndex, 1)
+      this.subtitleIndex = 0
+    },
+
+    SET_TEXT_INDEX(index: number) {
+      this.textIndex = index
     },
     ADD_TEXT() {
       this.data[this.currentIndex].text.push({
@@ -99,9 +150,23 @@ export const useState = defineStore('state', {
         text: '默认文案',
         color: '#000',
         fontSize: 14,
-        left: 0,
-        top: 0
+        left: 50,
+        top: 100
       })
+    },
+    SET_TEXT(index: number, obj: PERSON_TEXT) {
+      this.data[this.currentIndex].text[index] = {
+        ...this.data[this.currentIndex].text[index],
+        ...obj
+      }
+    },
+    DELETE_TEXT() {
+      this.data[this.currentIndex].text.splice(this.textIndex, 1)
+      this.textIndex = 0
+    },
+
+    SET_IMG_INDEX(index: number) {
+      this.imgIndex = index
     },
     ADD_IMG(img: string) {
       if (
@@ -118,17 +183,11 @@ export const useState = defineStore('state', {
         startTime: this.getLineStartTime,
         endTime: this.getLineEndTime,
         img,
-        left: 0,
+        left: 50,
         rotation: 0,
-        scale: '',
-        top: 0
+        scale: '1',
+        top: 100
       })
-    },
-    SET_TEXT(index: number, obj: PERSON_TEXT) {
-      this.data[this.currentIndex].text[index] = {
-        ...this.data[this.currentIndex].text[index],
-        ...obj
-      }
     },
     SET_IMG(index: number, obj: PERSON_IMG) {
       if (
@@ -136,7 +195,7 @@ export const useState = defineStore('state', {
           this.data[this.currentIndex].img,
           obj.startTime || 0,
           obj.endTime || 0,
-          4
+          5
         )
       ) {
         clearTimeout(timeout)
@@ -149,54 +208,51 @@ export const useState = defineStore('state', {
         ...obj
       }
     },
-    DELETE_TEXT() {
-      this.data[this.currentIndex].text.splice(this.textIndex, 1)
-      this.textIndex = 0
-    },
     DELETE_IMG() {
       this.data[this.currentIndex].img.splice(this.imgIndex, 1)
       this.imgIndex = 0
     },
-    STE_VIDEO_URL(url: string) {
-      this.temporary[this.currentIndex].firstImage = url
-    },
+
     SET_CURRENT_INDEX(index: number) {
       this.currentIndex = index
     },
-    SET_CURRENT_BOX_INDEX(index: number) {
+    SET_CURRENT_BOX_INDEX(index: 1 | 2 | 3 | 4) {
       this.boxIndex = index
     },
-    SET_TEXT_INDEX(index: number) {
-      this.textIndex = index
-    },
-    SET_IMG_INDEX(index: number) {
-      this.imgIndex = index
-    },
+
+    // 用栈存储用户操作状态
     ADD_STATUS_MAP() {
       this.statusMap.unshift(
-        JSON.parse(
-          JSON.stringify({
-            data: this.data,
-            temporary: this.temporary,
-            currentIndex: this.currentIndex,
-            boxIndex: this.boxIndex,
-            textIndex: this.textIndex,
-            imgIndex: this.imgIndex
-          })
-        )
+        JSON.stringify({
+          data: this.data,
+          temporary: this.temporary,
+          currentIndex: this.currentIndex,
+          boxIndex: this.boxIndex,
+          textIndex: this.textIndex,
+          imgIndex: this.imgIndex,
+          subtitleIndex: this.subtitleIndex
+        })
       )
     },
     CANCEL_STATUS_MAP() {
       this.statusMap.shift()
       if (!this.statusMap.length) return
-      const { data, temporary, currentIndex, boxIndex, textIndex, imgIndex } =
-        this.statusMap[0]
-      this.data = JSON.parse(JSON.stringify(data))
-      this.temporary = JSON.parse(JSON.stringify(temporary))
-      this.currentIndex = JSON.parse(JSON.stringify(currentIndex))
-      this.boxIndex = JSON.parse(JSON.stringify(boxIndex))
-      this.textIndex = JSON.parse(JSON.stringify(textIndex))
-      this.imgIndex = JSON.parse(JSON.stringify(imgIndex))
+      const {
+        data,
+        temporary,
+        currentIndex,
+        boxIndex,
+        textIndex,
+        imgIndex,
+        subtitleIndex
+      } = JSON.parse(this.statusMap[0])
+      this.data = data
+      this.temporary = temporary
+      this.currentIndex = currentIndex
+      this.boxIndex = boxIndex
+      this.textIndex = textIndex
+      this.imgIndex = imgIndex
+      this.subtitleIndex = subtitleIndex
     }
   }
 })

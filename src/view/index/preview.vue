@@ -25,7 +25,10 @@
             muted
             :src="url"
           ></video>
-          <layerList class="absolute bottom-0 left-0 right-0 top-0"></layerList>
+          <layerList
+            un-edit
+            class="absolute bottom-0 left-0 right-0 top-0"
+          ></layerList>
         </div>
         <div class="mt-12 flex">
           <img
@@ -34,6 +37,8 @@
             @click="play"
           />
           <n-slider
+            :tooltip="showTooltip"
+            class="flex items-center"
             :value="currentTime"
             :max="state.temporary[state.currentIndex]?.timeEnd || 0"
             :step="0.1"
@@ -75,9 +80,17 @@ const getVideoCurrentTime = () => {
   })
 }
 
+let toolTimeoutFn: ReturnType<typeof setTimeout>
+const showTooltip = ref(false)
 const updateValue = (time: number) => {
   previewVideo.value.currentTime = time
   currentTime.value = time
+
+  showTooltip.value = true
+  clearTimeout(toolTimeoutFn)
+  toolTimeoutFn = setTimeout(() => {
+    showTooltip.value = false
+  }, 1000)
 }
 
 const showModal = ref(false)

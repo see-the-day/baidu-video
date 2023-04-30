@@ -1,7 +1,7 @@
 <template>
   <div class="flex h-full w-full justify-between bg-black">
     <LeftBar></LeftBar>
-    <div class="flex flex-1 flex-col">
+    <div class="w-0 flex flex-1 flex-col">
       <Video></Video>
     </div>
     <RightBar></RightBar>
@@ -20,11 +20,11 @@ let catchStatus = true
 watch(
   () => [
     state.data,
-    state.temporary,
     state.currentIndex,
     state.boxIndex,
     state.textIndex,
-    state.imgIndex
+    state.imgIndex,
+    state.subtitleIndex
   ],
   () => {
     clearTimeout(timeOut)

@@ -6,18 +6,20 @@
         <span class="text-textWhite">x:</span>
         <n-input-number
           v-model:value="data.left"
-          :precision="0"
+          :precision="2"
           class="mb-12"
         ></n-input-number>
         <span class="text-textWhite">y:</span>
         <n-input-number
           v-model:value="data.top"
-          :precision="0"
+          :precision="2"
           class="mb-12"
         ></n-input-number>
       </div>
-      <div v-if="state.boxIndex === 2">
-        <span class="mb-12 text-textWhite">文案</span>
+      <div v-if="[2, 3].includes(state.boxIndex)">
+        <span class="mb-12 text-textWhite">
+          {{ state.boxIndex === 2 ? '文案' : '字幕名' }}
+        </span>
         <NInput v-model:value="data.text" :precision="0" class="mb-12"></NInput>
         <span class="mb-12 text-textWhite">颜色</span>
         <n-color-picker v-model:value="data.color" class="mb-12" />
@@ -60,25 +62,43 @@ const state = useState()
 
 const data = ref<(DATA_TEXT & DATA_IMG) | null>(null)
 
-const index = computed(() =>
-  state.boxIndex === 2 ? state.textIndex : state.imgIndex
-)
+const index = computed(() => {
+  if (state.boxIndex === 2) {
+    return state.textIndex
+  }
+  if (state.boxIndex === 3) {
+    return state.subtitleIndex
+  }
+  return state.imgIndex
+})
 
 let timeOut: ReturnType<typeof setTimeout>
 const updateData = () => {
   clearTimeout(timeOut)
   timeOut = setTimeout(() => {
-    const gettersKey = state.boxIndex === 2 ? 'SET_TEXT' : 'SET_IMG'
+    const map: Record<2 | 3 | 4, 'SET_TEXT' | 'SET_IMG' | 'SET_SUBTITLE'> = {
+      2: 'SET_TEXT',
+      3: 'SET_SUBTITLE',
+      4: 'SET_IMG'
+    }
+    const gettersKey = map[state.boxIndex as 2 | 3 | 4]
     state[gettersKey](index.value, { ...(data.value || {}) })
   }, 300)
 }
 
 const deleteBox = () => {
-  const gettersKey = state.boxIndex === 2 ? 'DELETE_TEXT' : 'DELETE_IMG'
-  state[gettersKey]()
+  const map: Record<
+    2 | 3 | 4,
+    'DELETE_TEXT' | 'DELETE_SUBTITLE' | 'DELETE_IMG'
+  > = {
+    2: 'DELETE_TEXT',
+    3: 'DELETE_SUBTITLE',
+    4: 'DELETE_IMG'
+  }
+  state[map[state.boxIndex as 2 | 3 | 4]]()
 }
 
-const isShow = computed(() => [2, 4].includes(state.boxIndex))
+const isShow = computed(() => [2, 3, 4].includes(state.boxIndex))
 watch(
   data,
   () => {
@@ -89,15 +109,30 @@ watch(
   { deep: true }
 )
 watch(
-  () => [state.data, state.boxIndex, state.imgIndex, state.textIndex],
+  () => [
+    state.data,
+    state.boxIndex,
+    state.subtitleIndex,
+    state.imgIndex,
+    state.textIndex
+  ],
   () => {
     if (isShow.value) {
-      const gettersKey = state.boxIndex === 2 ? 'getLayerText' : 'getLayerImg'
+      const map: Record<
+        2 | 3 | 4,
+        'getLayerText' | 'getLayerImg' | 'getLayerSubtitle'
+      > = {
+        2: 'getLayerText',
+        3: 'getLayerSubtitle',
+        4: 'getLayerImg'
+      }
       if (
-        JSON.stringify(state[gettersKey][index.value]) !==
+        JSON.stringify(state[map[state.boxIndex as 2 | 3 | 4]][index.value]) !==
         JSON.stringify(data.value)
       ) {
-        data.value = { ...(state[gettersKey][index.value] || {}) } as any
+        data.value = {
+          ...(state[map[state.boxIndex as 2 | 3 | 4]][index.value] || {})
+        } as any
       }
     }
   },

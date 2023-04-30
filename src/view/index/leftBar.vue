@@ -17,6 +17,7 @@
         v-else-if="currentType === 2"
         :list="menu[currentType - 1].children"
       ></textBox>
+      <textSubtitle v-else-if="currentType === 3"></textSubtitle>
       <imgBox
         v-else-if="currentType === 4"
         :list="menu[currentType - 1].children"
@@ -28,6 +29,7 @@
 import { computed } from 'vue'
 import uploadVideo from './uploadVideo.vue'
 import textBox from './textBox.vue'
+import textSubtitle from './textSubtitle.vue'
 import imgBox from './imgBox.vue'
 import { useState } from '@/store/videoState'
 
