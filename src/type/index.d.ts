@@ -6,6 +6,8 @@ export interface DATA_TEXT {
   fontSize?: number
   left: number
   top: number
+  stroke: number
+  strokeColor: string
 }
 export interface DATA_IMG {
   startTime?: number
@@ -26,6 +28,8 @@ type SUBTITLE = {
   fontSize: number
   top: number
   left: number
+  stroke: number
+  strokeColor: string
   data: {
     startTime: number
     endTime: number

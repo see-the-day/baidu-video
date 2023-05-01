@@ -17,7 +17,7 @@
         top: `${li.top}%`,
         transform: 'translateX(-50%) translateY(-100%)'
       }"
-      @mouseup="handleMouseUp"
+      @mouseup="mouseover"
       @mousedown="handleMouseDown($event, li.type)"
       @mouseleave="mouseover"
       @mousemove="mousemove($event, li.index, li.type)"
@@ -25,7 +25,9 @@
     >
       <span
         v-if="li.type === 'text'"
-        :style="`color: ${li.color}; font-size: ${li.fontSize}px`"
+        :class="{ stroke: li.stroke }"
+        :data-content="li.text"
+        :style="getTextStyle(li.color, li.fontSize, li.stroke, li.strokeColor)"
       >
         {{ li.text }}
       </span>
@@ -36,7 +38,11 @@
             state.getCurrentTime >= startTime && state.getCurrentTime <= endTime
           "
           :key="i"
-          :style="`color: ${li.color}; font-size: ${li.fontSize}px`"
+          :class="{ stroke: li.stroke }"
+          :data-content="text"
+          :style="
+            getTextStyle(li.color, li.fontSize, li.stroke, li.strokeColor)
+          "
         >
           {{ text }}
         </div>
@@ -54,11 +60,20 @@
 <script lang="ts" setup>
 import { computed, ref, withDefaults } from 'vue'
 import { useState } from '@/store/videoState'
-import { DATA_TEXT } from '@/type/index'
+import { DATA_TEXT, DATA_IMG } from '@/type/index'
 
 const props = withDefaults(defineProps<{ unEdit?: boolean }>(), {
   unEdit: false
 })
+
+const getTextStyle = (
+  color: string,
+  fontSize: number,
+  stroke: number,
+  strokeColor: string
+) => {
+  return `color: ${color};-webkit-text-stroke: ${stroke}px ${strokeColor};text-stroke: ${stroke}px ${strokeColor}; font-size: ${fontSize}px`
+}
 
 const state = useState()
 
@@ -66,16 +81,12 @@ const currentTime = computed(() => state.getCurrentTime - state.getStartTime)
 
 const isBorder = computed(
   () => (type: 'text' | 'img' | 'subtitle', index: number) => {
-    if (state.boxIndex === 4 && type === 'img' && state.imgIndex === index) {
-      return true
-    }
-    if (state.boxIndex === 2 && type === 'text' && state.textIndex === index) {
-      return true
-    }
     if (
-      state.boxIndex === 3 &&
-      type === 'subtitle' &&
-      state.subtitleIndex === index
+      (state.boxIndex === 4 && type === 'img' && state.imgIndex === index) ||
+      (state.boxIndex === 2 && type === 'text' && state.textIndex === index) ||
+      (state.boxIndex === 3 &&
+        type === 'subtitle' &&
+        state.subtitleIndex === index)
     ) {
       return true
     }
@@ -102,7 +113,7 @@ const list = computed(() => {
   state.getLayerText.forEach((obj: DATA_TEXT, index: number) => {
     listMap.push({ ...obj, type: 'text', index })
   })
-  state.getLayerImg.forEach((obj: DATA_TEXT, index: number) => {
+  state.getLayerImg.forEach((obj: DATA_IMG, index: number) => {
     listMap.push({ ...obj, type: 'img', index })
   })
   state.getLayerSubtitle.forEach((obj: DATA_TEXT, index: number) => {
@@ -113,9 +124,6 @@ const list = computed(() => {
 
 const isMove = ref(false)
 const mouseover = () => {
-  isMove.value = false
-}
-const handleMouseUp = () => {
   isMove.value = false
 }
 const pauseEvent = (e: any) => {
@@ -173,3 +181,19 @@ const mousemove = (
   }
 }
 </script>
+<style lang="scss" scoped>
+.stroke {
+  font-family: Heavy;
+  font-size: 30px;
+  font-weight: 900;
+}
+/* 通过属性选择器结合伪元素before 实现文字外描边效果 */
+[data-content]::before {
+  /* attr()是用来获取被选中元素的某属性值,并且在样式文件中使用 */
+  content: attr(data-content);
+  position: absolute;
+  /* 实现元素外描边的关键 */
+  -webkit-text-stroke: 0;
+  /* 文本颜色 */
+}
+</style>

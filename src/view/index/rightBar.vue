@@ -28,9 +28,19 @@
           v-model:value="data.fontSize"
           :precision="0"
           :min="12"
-          :max="24"
+          :max="36"
           class="mb-12"
         ></n-input-number>
+        <span class="mb-12 text-textWhite">描边字号</span>
+        <n-input-number
+          v-model:value="data.stroke"
+          :precision="0"
+          :min="0"
+          :max="36"
+          class="mb-12"
+        ></n-input-number>
+        <span class="mb-12 text-textWhite">描边颜色</span>
+        <n-color-picker v-model:value="data.strokeColor" class="mb-12" />
       </div>
       <div v-if="state.boxIndex === 4">
         <span class="mb-12 text-textWhite">放大</span>

@@ -115,6 +115,8 @@ export const useState = defineStore('state', {
         color: '#000',
         fontSize: 14,
         data: subtitle,
+        stroke: 0,
+        strokeColor: '#000',
         text: `${length}`
       })
     },
@@ -151,7 +153,9 @@ export const useState = defineStore('state', {
         color: '#000',
         fontSize: 14,
         left: 50,
-        top: 100
+        top: 100,
+        stroke: 0,
+        strokeColor: '#000'
       })
     },
     SET_TEXT(index: number, obj: PERSON_TEXT) {

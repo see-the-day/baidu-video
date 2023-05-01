@@ -9,7 +9,7 @@
       {{ (scale - 1) % 10 ? '' : `${scale - 1}s` }}
     </div>
     <div
-      class="absolute bottom-0 top-0 w-1 cursor-move bg-white"
+      class="absolute bottom-0 top-0 z-10 w-1 cursor-move bg-white"
       :style="{ left: `${(currentTime * 100) / timeEnd}%` }"
     ></div>
   </div>
