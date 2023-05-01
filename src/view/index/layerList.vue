@@ -105,7 +105,6 @@ const currentEditElement = (
   index: number,
   layerType: 'text' | 'img' | 'subtitle'
 ) => {
-  console.log(111)
   const indexMap: Record<'text' | 'subtitle' | 'img', 2 | 3 | 4> = {
     text: 2,
     subtitle: 3,

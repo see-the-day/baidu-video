@@ -160,10 +160,8 @@ export const useState = defineStore('state', {
       })
     },
     SET_TEXT(index: number, obj: PERSON_TEXT) {
-      this.data[this.currentIndex].text[index] = {
-        ...this.data[this.currentIndex].text[index],
-        ...obj
-      }
+      const data = { ...this.data[this.currentIndex].text[index], ...obj }
+      this.data[this.currentIndex].text[index] = data
     },
     DELETE_TEXT() {
       this.data[this.currentIndex].text.splice(this.textIndex, 1)
@@ -227,17 +225,18 @@ export const useState = defineStore('state', {
 
     // 用栈存储用户操作状态
     ADD_STATUS_MAP() {
-      this.statusMap.unshift(
-        JSON.stringify({
-          data: this.data,
-          temporary: this.temporary,
-          currentIndex: this.currentIndex,
-          boxIndex: this.boxIndex,
-          textIndex: this.textIndex,
-          imgIndex: this.imgIndex,
-          subtitleIndex: this.subtitleIndex
-        })
-      )
+      const data = JSON.stringify({
+        data: this.data,
+        temporary: this.temporary,
+        currentIndex: this.currentIndex,
+        boxIndex: this.boxIndex,
+        textIndex: this.textIndex,
+        imgIndex: this.imgIndex,
+        subtitleIndex: this.subtitleIndex
+      })
+      if (data !== this.statusMap[0]) {
+        this.statusMap.unshift(data)
+      }
     },
     CANCEL_STATUS_MAP() {
       this.statusMap.shift()
