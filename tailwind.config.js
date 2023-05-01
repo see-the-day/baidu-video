@@ -91,7 +91,8 @@ module.exports = {
       TableWidth: '48%',
       divide: '50%',
       sixPer: '60%',
-      full: '100%'
+      full: '100%',
+      maxContent: 'max-content'
     },
     height: {
       0: '0px',

@@ -1,5 +1,5 @@
 <template>
-  <div ref="videoBox">
+  <div ref="videoBox" class="overflow-hidden">
     <div
       v-for="(li, index) of list"
       v-show="
@@ -8,7 +8,7 @@
         li.layerType === 'subtitle'
       "
       :key="index"
-      class="absolute p-4"
+      class="absolute w-maxContent rounded-4 p-4"
       :class="{
         'border border-primary':
           !props.unEdit && isBorder(li.layerType, li.index)
@@ -19,7 +19,7 @@
         transform: 'translateX(-50%) translateY(-100%)'
       }"
       @mouseup="mouseover"
-      @mousedown="handleMouseDown($event, li.layerType)"
+      @mousedown="handleMouseDown"
       @mouseleave="mouseover"
       @mousemove="mousemove($event, li.index, li.layerType)"
       @click="currentEditElement(li.index, li.layerType)"
@@ -105,6 +105,14 @@ const currentEditElement = (
   index: number,
   layerType: 'text' | 'img' | 'subtitle'
 ) => {
+  console.log(111)
+  const indexMap: Record<'text' | 'subtitle' | 'img', 2 | 3 | 4> = {
+    text: 2,
+    subtitle: 3,
+    img: 4
+  }
+  state.SET_CURRENT_BOX_INDEX(indexMap[layerType])
+
   const map: Record<
     'text' | 'img' | 'subtitle',
     'SET_TEXT_INDEX' | 'SET_IMG_INDEX' | 'SET_SUBTITLE_INDEX'
@@ -115,6 +123,7 @@ const currentEditElement = (
   }
   state[map[layerType]](index)
 }
+
 const list = computed(() => {
   const listMap: Record<string, any>[] = []
   state.getLayerText.forEach((obj: DATA_TEXT, index: number) => {
@@ -133,6 +142,7 @@ const isMove = ref(false)
 const mouseover = () => {
   isMove.value = false
 }
+
 const pauseEvent = (e: any) => {
   // 已做兼容性处理
   if (e.stopPropagation) e.stopPropagation()
@@ -142,16 +152,8 @@ const pauseEvent = (e: any) => {
   return false
 }
 let client = { clientX: 0, clientY: 0 }
-const handleMouseDown = (
-  e: { clientX: number; clientY: number },
-  layerType: 'text' | 'subtitle' | 'img'
-) => {
-  const typeMap = {
-    text: 2,
-    subtitle: 3,
-    img: 4
-  }
-  if (!props.unEdit && typeMap[layerType] === state.boxIndex) {
+const handleMouseDown = (e: { clientX: number; clientY: number }) => {
+  if (!props.unEdit) {
     client = { clientX: e.clientX, clientY: e.clientY }
     pauseEvent(e)
     isMove.value = true
@@ -184,8 +186,8 @@ const mousemove = (
       y +
       ((state.data[state.currentIndex][layerType][index]?.top || 0) as number)
     state[typeMap[layerType]](index, {
-      left: left > 0 ? Number(left.toFixed(2)) : 0,
-      top: top > 0 ? Number(top.toFixed(2)) : 0
+      left: Number(left.toFixed(2)),
+      top: Number(top.toFixed(2))
     })
   }
 }
