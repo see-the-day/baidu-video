@@ -13,6 +13,7 @@ module.exports = {
         hoverBgGray: '#FFF5F5',
         bgExit: '#545559',
         bgIndex: '#D8D8D8',
+        blue: '#5B8FF9',
         'red-100': '#FFF8EE',
         'bgGray-100': '#B4B7BF',
         'bgGray-200': '#84868C'
@@ -31,6 +32,9 @@ module.exports = {
         boxBack: '#F2F3F5',
         gray: '#999'
       }
+    },
+    fontFamily: {
+      Ngaan: ['Ngaan']
     },
     fontSize: {
       12: '12px',
@@ -212,7 +216,8 @@ module.exports = {
     borderColor: {
       DEFAULT: '#E9ECF2',
       white: '#fff',
-      primary: '#F04848'
+      primary: '#F04848',
+      blue: '#5B8FF9'
     },
     minHeight: {
       200: '200px'

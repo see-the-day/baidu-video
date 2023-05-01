@@ -1,4 +1,4 @@
-import { DATA_IMG } from '@/type/index'
+import { DATA_IMG, TEXT_TYPE } from '@/type/index'
 
 /**
  * dataImg 当前图片集合数据
@@ -26,4 +26,12 @@ export const isAddTextLine = (
     }
   }
   return true
+}
+
+export const typeTextStyle = (type: TEXT_TYPE = 0) => {
+  const styleMap: Record<TEXT_TYPE, string> = {
+    0: '',
+    1: 'rounded-4 border-2 border-white bg-blue p-4 font-Ngaan'
+  }
+  return styleMap[type]
 }

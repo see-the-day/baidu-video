@@ -1,4 +1,6 @@
+export type TEXT_TYPE = 0 | 1
 export interface DATA_TEXT {
+  type: TEXT_TYPE
   startTime?: number
   endTime?: number
   text?: string
@@ -16,13 +18,13 @@ export interface DATA_IMG {
   left: number
   top: number
   rotation: number
-  scale: string
+  scale: number
 }
 
 export type PERSON_TEXT = Partial<DATA_TEXT>
 export type PERSON_IMG = Partial<DATA_IMG>
 
-type SUBTITLE = {
+export type SUBTITLE = {
   text: string
   color: string
   fontSize: number

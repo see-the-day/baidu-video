@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { PERSON_TEXT, PERSON_IMG, VIDEO_DATA } from '@/type/index'
+import { PERSON_TEXT, PERSON_IMG, VIDEO_DATA, TEXT_TYPE } from '@/type/index'
 import { isAddTextLine } from '@/util/index'
 
 let timeout: ReturnType<typeof setTimeout>
@@ -145,7 +145,7 @@ export const useState = defineStore('state', {
     SET_TEXT_INDEX(index: number) {
       this.textIndex = index
     },
-    ADD_TEXT() {
+    ADD_TEXT(type: TEXT_TYPE = 0) {
       this.data[this.currentIndex].text.push({
         startTime: this.getLineStartTime,
         endTime: this.getLineEndTime,
@@ -155,7 +155,8 @@ export const useState = defineStore('state', {
         left: 50,
         top: 100,
         stroke: 0,
-        strokeColor: '#000'
+        strokeColor: '#000',
+        type
       })
     },
     SET_TEXT(index: number, obj: PERSON_TEXT) {
@@ -189,7 +190,7 @@ export const useState = defineStore('state', {
         img,
         left: 50,
         rotation: 0,
-        scale: '1',
+        scale: 1,
         top: 100
       })
     },

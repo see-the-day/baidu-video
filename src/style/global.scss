@@ -6,3 +6,11 @@
 .n-upload-trigger {
   width: 100%;
 }
+
+@font-face {
+  /* 指定字体名字 */
+  font-family: Ngaan;
+
+  /* 服务器中字体路径 */
+  src: url("/font/I.Ngaan.ttf");
+}

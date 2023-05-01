@@ -5,12 +5,13 @@
       v-show="
         (currentTime >= Number(li?.startTime) &&
           currentTime <= Number(li?.endTime)) ||
-        li.type === 'subtitle'
+        li.layerType === 'subtitle'
       "
       :key="index"
       class="absolute p-4"
       :class="{
-        'border border-primary': !props.unEdit && isBorder(li.type, li.index)
+        'border border-primary':
+          !props.unEdit && isBorder(li.layerType, li.index)
       }"
       :style="{
         left: `${li.left}%`,
@@ -18,20 +19,20 @@
         transform: 'translateX(-50%) translateY(-100%)'
       }"
       @mouseup="mouseover"
-      @mousedown="handleMouseDown($event, li.type)"
+      @mousedown="handleMouseDown($event, li.layerType)"
       @mouseleave="mouseover"
-      @mousemove="mousemove($event, li.index, li.type)"
-      @click="currentEditElement(li.index, li.type)"
+      @mousemove="mousemove($event, li.index, li.layerType)"
+      @click="currentEditElement(li.index, li.layerType)"
     >
       <span
-        v-if="li.type === 'text'"
-        :class="{ stroke: li.stroke }"
+        v-if="li.layerType === 'text'"
+        :class="[typeTextStyle(li.type), li.stroke ? 'stroke' : '']"
         :data-content="li.text"
         :style="getTextStyle(li.color, li.fontSize, li.stroke, li.strokeColor)"
       >
         {{ li.text }}
       </span>
-      <template v-if="li.type === 'subtitle'">
+      <template v-if="li.layerType === 'subtitle'">
         <div
           v-for="({ startTime, endTime, text }, i) of li.data"
           v-show="
@@ -48,9 +49,10 @@
         </div>
       </template>
       <img
-        v-if="li.type === 'img'"
-        :style="`transform: rotate(${li.rotation}deg) scale(${li.scale})`"
-        class="h-36 w-36"
+        v-if="li.layerType === 'img'"
+        :style="`width: ${36 * li.scale}px;transform: rotate(${
+          li.rotation
+        }deg)`"
         :src="li.img"
       />
     </div>
@@ -60,7 +62,8 @@
 <script lang="ts" setup>
 import { computed, ref, withDefaults } from 'vue'
 import { useState } from '@/store/videoState'
-import { DATA_TEXT, DATA_IMG } from '@/type/index'
+import { typeTextStyle } from '@/util'
+import { DATA_TEXT, DATA_IMG, SUBTITLE } from '@/type/index'
 
 const props = withDefaults(defineProps<{ unEdit?: boolean }>(), {
   unEdit: false
@@ -80,12 +83,16 @@ const state = useState()
 const currentTime = computed(() => state.getCurrentTime - state.getStartTime)
 
 const isBorder = computed(
-  () => (type: 'text' | 'img' | 'subtitle', index: number) => {
+  () => (layerType: 'text' | 'img' | 'subtitle', index: number) => {
     if (
-      (state.boxIndex === 4 && type === 'img' && state.imgIndex === index) ||
-      (state.boxIndex === 2 && type === 'text' && state.textIndex === index) ||
+      (state.boxIndex === 4 &&
+        layerType === 'img' &&
+        state.imgIndex === index) ||
+      (state.boxIndex === 2 &&
+        layerType === 'text' &&
+        state.textIndex === index) ||
       (state.boxIndex === 3 &&
-        type === 'subtitle' &&
+        layerType === 'subtitle' &&
         state.subtitleIndex === index)
     ) {
       return true
@@ -96,7 +103,7 @@ const isBorder = computed(
 
 const currentEditElement = (
   index: number,
-  type: 'text' | 'img' | 'subtitle'
+  layerType: 'text' | 'img' | 'subtitle'
 ) => {
   const map: Record<
     'text' | 'img' | 'subtitle',
@@ -106,18 +113,18 @@ const currentEditElement = (
     img: 'SET_IMG_INDEX',
     subtitle: 'SET_SUBTITLE_INDEX'
   }
-  state[map[type]](index)
+  state[map[layerType]](index)
 }
 const list = computed(() => {
   const listMap: Record<string, any>[] = []
   state.getLayerText.forEach((obj: DATA_TEXT, index: number) => {
-    listMap.push({ ...obj, type: 'text', index })
+    listMap.push({ ...obj, layerType: 'text', index })
   })
   state.getLayerImg.forEach((obj: DATA_IMG, index: number) => {
-    listMap.push({ ...obj, type: 'img', index })
+    listMap.push({ ...obj, layerType: 'img', index })
   })
-  state.getLayerSubtitle.forEach((obj: DATA_TEXT, index: number) => {
-    listMap.push({ ...obj, type: 'subtitle', index })
+  state.getLayerSubtitle.forEach((obj: SUBTITLE, index: number) => {
+    listMap.push({ ...obj, layerType: 'subtitle', index })
   })
   return listMap
 })
@@ -137,14 +144,14 @@ const pauseEvent = (e: any) => {
 let client = { clientX: 0, clientY: 0 }
 const handleMouseDown = (
   e: { clientX: number; clientY: number },
-  type: 'text' | 'subtitle' | 'img'
+  layerType: 'text' | 'subtitle' | 'img'
 ) => {
   const typeMap = {
     text: 2,
     subtitle: 3,
     img: 4
   }
-  if (!props.unEdit && typeMap[type] === state.boxIndex) {
+  if (!props.unEdit && typeMap[layerType] === state.boxIndex) {
     client = { clientX: e.clientX, clientY: e.clientY }
     pauseEvent(e)
     isMove.value = true
@@ -155,7 +162,7 @@ const videoBox = ref({ clientHeight: 0 })
 const mousemove = (
   e: { clientX: number; clientY: number },
   index: number,
-  type: 'text' | 'subtitle' | 'img'
+  layerType: 'text' | 'subtitle' | 'img'
 ) => {
   const x = ((e.clientX - client.clientX) * 100) / 460
   const y = ((e.clientY - client.clientY) * 100) / videoBox.value.clientHeight
@@ -171,10 +178,12 @@ const mousemove = (
       img: 'SET_IMG'
     }
     const left =
-      x + ((state.data[state.currentIndex][type][index]?.left || 0) as number)
+      x +
+      ((state.data[state.currentIndex][layerType][index]?.left || 0) as number)
     const top =
-      y + ((state.data[state.currentIndex][type][index]?.top || 0) as number)
-    state[typeMap[type]](index, {
+      y +
+      ((state.data[state.currentIndex][layerType][index]?.top || 0) as number)
+    state[typeMap[layerType]](index, {
       left: left > 0 ? Number(left.toFixed(2)) : 0,
       top: top > 0 ? Number(top.toFixed(2)) : 0
     })
@@ -183,17 +192,13 @@ const mousemove = (
 </script>
 <style lang="scss" scoped>
 .stroke {
-  font-family: Heavy;
+  // font-family: Ngaan;
   font-size: 30px;
   font-weight: 900;
 }
-/* 通过属性选择器结合伪元素before 实现文字外描边效果 */
 [data-content]::before {
-  /* attr()是用来获取被选中元素的某属性值,并且在样式文件中使用 */
   content: attr(data-content);
   position: absolute;
-  /* 实现元素外描边的关键 */
   -webkit-text-stroke: 0;
-  /* 文本颜色 */
 }
 </style>

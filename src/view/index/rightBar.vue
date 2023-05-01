@@ -44,11 +44,13 @@
       </div>
       <div v-if="state.boxIndex === 4">
         <span class="mb-12 text-textWhite">放大</span>
-        <NInput
+        <n-input-number
           v-model:value="data.scale"
           :precision="0.1"
+          :min="0"
+          :max="10"
           class="mb-12"
-        ></NInput>
+        ></n-input-number>
         <span class="mb-12 text-textWhite">旋转</span>
         <n-input-number
           v-model:value="data.rotation"
