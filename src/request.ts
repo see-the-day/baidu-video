@@ -17,15 +17,10 @@ service.interceptors.request.use(
   }
 )
 
-interface Res {
-  error_code: number
-  message: string
-  error_msg: string
-}
 // response interceptor
 service.interceptors.response.use(
   (response) => {
-    const res: Res = response.data
+    const res: any = response.data
     return res
   },
   (error) => {

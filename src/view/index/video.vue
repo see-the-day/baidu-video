@@ -54,7 +54,6 @@ import exportVue from './export.vue'
 import preview from './preview.vue'
 
 const myVideo = ref<HTMLVideoElement>({} as HTMLVideoElement)
-
 const state = useState()
 // 当前帧转成图片
 const setImg = () => {
@@ -63,7 +62,14 @@ const setImg = () => {
   const ctx = canvas.getContext('2d')
   canvas.width = myVideo.value.videoWidth
   canvas.height = myVideo.value.videoHeight
-  ctx?.drawImage(myVideo.value, 0, 0, canvas.width, canvas.height)
+  ctx?.drawImage(
+    // eslint-disable-next-line no-undef
+    myVideo.value as CanvasImageSource,
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  )
   const imgBase64 = canvas.toDataURL('image/png')
   state.STE_VIDEO_URL(imgBase64)
 }
